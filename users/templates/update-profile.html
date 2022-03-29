@@ -1,0 +1,126 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   <!-- Header Section -->
+   <header>
+      <div class="header-wrapper width-p-20 height-p-10">
+         <div class="header-1">
+            <a href="{% url 'home' %}">
+               <div class="logo">
+                  <!-- <img src="{% static 'images/logos/seefriends-logo-4.png' %}" alt="seefriends logo"> -->
+                  <h3 class="no-margin" style="font-family: Roboto;">Edit Profile</h3>
+               </div>
+            </a>
+         </div>
+         <div class="header">
+            <a href="{% url 'user-profile' %}">
+               <div class="inbox">
+                  <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
+               </div>
+            </a>
+         </div>
+      </div>
+   </header>
+   <!-- Header Section End -->
+
+   <!-- Main Section -->
+   <main>
+      <div class="edit-profile-wrapper width-p-20 height-p-20">
+
+         <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <label for="id_img">
+               <div class="change-profile-pic">
+                  <img src="{{request.user.profile.img.url}}" id="output" class="output"/>
+               </div>
+               <p id="change-pp-btn">Change Profile Picture</p>
+            </label>
+            <input id="id_img" name="img" type="file" onchange="loadFile(event)" class="none">
+
+            <div class="edit-profile">
+               <label for="name">Name</label>
+               <input type="text" name="name" id="name" value="{{request.user.profile.name}}">
+               <label for="username">Username</label>
+               <input type="text" name="username" id="username"value="{{request.user.profile.username}}">
+               <label for="email">Email</label>
+               <input type="text" name="email" id="email" value="{{request.user.profile.email}}">
+               <label for="bio">Bio</label>
+               <textarea type="text" name="bio" id="bio">{{request.user.profile.bio}}</textarea>
+
+               <input type="submit" value="Save">
+            </div>
+         </form>
+         <!-- {% for field in form %}
+         {{field.label}}
+         {{field}}
+         {% endfor %} -->
+         
+      </div>
+   </main>
+   <!-- Main Section End -->
+
+   <!-- Footer Section -->
+   <!-- <footer>
+      <div class="footer-wrapper height-p-10">
+         <a href="index.html">
+            <div class="f-feed" title="feed">
+               <img src="images/footer icons/footer-feed.png" alt="feed" class="small-img">
+            </div>
+         </a>
+
+         <a href="tells.html">
+            <div class="f-tells" title="tells">
+               <img src="images/footer icons/footer-tells.png" alt="tells" class="small-img">
+            </div>
+         </a>
+         
+         <a href="">
+            <div class="post-button f-post" title="post">
+               <img src="images/footer icons/footer-add.png" alt="post" class="small-img">
+            </div>
+         </a>
+
+         <a href="activity.html">
+            <div class="f-activity" title="activity">
+               <img src="images/footer icons/footer-likes.png" alt="activity" class="small-img">
+            </div>
+         </a>
+
+         <a href="user-profile.html">
+            <div class="f-profile" title="profile">
+               <img src="images/footer icons/footer-user.png" alt="profile" class="small-img">
+            </div>
+         </a>
+
+      </div>
+   </footer> -->
+   <!-- Footer Section End -->
+
+   <!-- Note: user-button: event handler only shows (edit-profile, settings, logout) when we have opened up the profile page and clicked on the icon a second time while still on the user-profile page. else it won't work-->
+
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+
+
+</body>
+
+{% endblock content %}

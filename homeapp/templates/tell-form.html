@@ -1,0 +1,71 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<header>
+   <div class="header-wrapper width-p-20 height-p-10">
+      <div class="header-1">
+         <a href="/">
+         <div class="activity-logo">
+            <h3 class="no-margin">Tell</h3>
+            <img src="{% static 'images/footer icons/footer-add.png' %}" alt="Activity logo" class="activity-log-img">
+         </div>
+      </a>
+      </div>
+      <div class="header-2">
+         <a href="chat.html">
+            <div class="inbox">
+               <img src="{% static 'images/footer icons/footer-inbox.png' %}" alt="user">
+            </div>
+         </a>
+      </div>
+   </div>
+</header>
+<!-- Header Section -->
+
+
+<!-- Main Section -->
+<main>
+   <section class="form-wrapper background-white">
+      <form action="" method="POST">
+         {% csrf_token %}
+
+         <!-- <div class="post-layer-1">
+            <label for="post-file">
+               <div id="post-file-btn" class="post-file-wrapper">
+                  <h2 id="tapheretopost" class="no-margin white">tap HERE to post</h2>
+                  <img id="output" />
+               </div>
+            </label>
+            <input id="post-file" type="file" onchange="loadFile(event)" style="display: none;">
+         </div> -->
+         
+         <div class="tell-layer width-p-10">
+            <div class="chat">
+               <div class="group-1">
+                  <img src="{{request.user.profile.img.url}}" alt="" class="profile-pic-smallbig">
+                  <div class="chat-content width-p-20">
+                     <h3 class="no-margin">{{request.user.profile}}
+                        {% if request.user.profile.verified %}
+                        <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
+                        {% endif %}
+                     </h3>
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+         <div class="post-layer-3 width-p-20">
+            <textarea id= "caption" name="tell" class="post-textarea" placeholder="Type something..."></textarea>
+            <input type="submit" class="post-btn" value="Tell">
+         </div>
+
+      </form>
+   </section>
+</main>
+<!-- Main Section End -->
+
+{% include 'components/footer-component.html' %}
+
+{% endblock content %}

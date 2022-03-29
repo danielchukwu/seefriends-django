@@ -1,0 +1,89 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- Header Section -->
+<header>
+   <div class="header-wrapper width-p-20 height-p-10">
+      <div class="header-1">
+         <a href="/">
+         <div class="activity-logo">
+            <h3 class="no-margin">Post</h3>
+            <img src="{% static 'images/footer icons/footer-add.png' %}" alt="Activity logo" class="activity-log-img">
+         </div>
+      </a>
+      </div>
+      <div class="header-2">
+         <a href="chat.html">
+            <div class="inbox">
+               <img src="{% static 'images/footer icons/footer-inbox.png' %}" alt="user">
+            </div>
+         </a>
+      </div>
+   </div>
+</header>
+<!-- Header Section -->
+
+<!-- Main Section -->
+<main>
+   <section class="form-wrapper background-white">
+      <form action="{% url 'create-post' %}" method="POST" enctype="multipart/form-data">
+         {% csrf_token %}
+         
+         <div class="post-layer-1">
+            <label for="id_img">
+               <div id="post-file-btn" class="post-file-wrapper">
+                  <h2 id="tapheretopost" class="no-margin white">tap HERE to post</h2>
+                  <img id="output" />
+               </div>
+            </label>
+            <input id="id_img" name="img" accept="image/" type="file" onchange="loadFile(event)" hidden>
+         </div>
+         
+         <div class="post-layer-2 width-p-10">
+            <div class="chat">
+               <div class="group-1">
+                  <img src="{{request.user.profile.img.url}}" alt="" class="profile-pic-smallbig">
+                  <div class="chat-content width-p-20">
+                     <h3 class="no-margin">{{request.user}}
+                        {% if request.user.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
+                        {% endif %}
+                     </h3>
+                  </div>
+               </div>
+            </div>
+         </div>
+         
+         <div class="post-layer-3 width-p-20">
+            <textarea id="id_body" name="body" class="post-textarea" required placeholder="Type something..."></textarea>
+            <input type="submit" class="post-btn" value="Post">
+         </div>
+
+      </form>
+   </section>
+</main>
+<!-- Main Section End -->
+
+{% include 'components/footer-component.html' %}
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+
+{% endblock content %}

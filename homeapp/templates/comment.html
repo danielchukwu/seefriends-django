@@ -1,0 +1,92 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+   <!-- Comment Floater Container -->
+   <div class="comment-in">
+      <div class="comment-container">
+
+         <header>
+            <div class="header-wrapper width-p-20 height-p-10">
+               <div class="header-1">
+                  <div class="activity-logo">
+                     <h3 class="tells-logo">Comments</h3>
+                  </div>
+               </div>
+               <div class="header-2">
+                  <div id="comment-out" class="inbox">
+                     {% if request.GET.q %}
+                     <a href="{{request.GET.q}}">
+                        <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
+                     </a>
+                     {% else %}
+                     <a href="{% url 'tells' %}">
+                        <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
+                     </a>
+                     {%endif%}
+                  </div>
+                  </div>
+            </div>
+         </header>
+         
+         <div class="comment-floater-box">
+            <div class="content-wrapper">
+               
+               <div class="content-2 no-borders width-p-10">
+                  <div class="content-layer-1">
+                     <div class="cl-left flex">
+                        <img src="{{tell.owner.profile.img.url}}" alt="" class="profile-pic">
+                        <div class="content-owner">
+                           <a href="#"><h3>{{tell.owner}}
+                              {% if tell.owner.profile.verified %}
+                              <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
+                              {% endif %}
+                           </h3></a>
+                        </div>
+                     </div>
+                     <div class="cl-right">
+                        <p>{{tell.get_total_likes}}</p>
+                        <a href="#">
+                           {% if request.user not in tell.likers.all %}
+                           <a href="{% url 'like-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-black.png' %}" alt="" class="heart-tell"></a>
+                           {% else %}
+                           <a href="{% url 'unlike-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="heart-tell"></a>
+                           {% endif %}
+                        </a>
+                     </div>
+                  </div>
+                  <div class="content-layer-2">
+                     <p>{{tell.body}}</p>
+                  </div>
+               </div>
+               <hr>
+               
+               <div class="comment-wrapper">
+                  {% for comment in tell.commentontell_set.all %}
+                  <div class="a_comment">
+                     <img src="{{comment.owner.profile.img.url}}" alt="" class="profile-pic">
+                     <p><a href="{% url 'other-profile' comment.owner.id %}"><strong>{{comment.owner}}</strong> </a>{{comment.comment}}</p>
+                  </div>
+                  {% endfor %}
+   
+   
+               </div>
+            </div>
+         </div>
+   
+         <div class="footer">
+            <form action="{% url 'add-tell-comment' tell.id %}" method="POST">
+               {% csrf_token %}
+               <div class="comment-btn-wrappers">
+                  <input type="text" name="comment" id="comment" placeholder="Add a comment">
+                  <input type="submit" value="comment" class="post-comment-btn">
+               </div>
+            </form>
+         </div>
+
+      </div>
+   </div>
+   <!-- Comment Floater Container -->
+
+{% endblock content %}

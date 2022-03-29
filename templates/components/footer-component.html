@@ -1,0 +1,37 @@
+{% load static %}
+
+<!-- Footer Section -->
+<footer>
+   <div class="footer-wrapper height-p-10">
+      <a href="{% url 'home' %}">
+         <div class="f-feed" title="feed">
+            <img src="{% static 'images/footer icons/footer-feed.png' %}" alt="feed" class="small-img">
+         </div>
+      </a>
+
+      <a href="{% url 'tells' %}">
+         <div class="f-tells" title="tells">
+            <img src="{% static 'images/footer icons/footer-tells.png' %}" alt="tells" class="small-img">
+         </div>
+      </a>
+      
+      <a href="">
+         <div class="post-button f-post" title="post">
+            <img src="{% static 'images/footer icons/footer-add.png' %}" alt="post" class="small-img">
+         </div>
+      </a>
+
+      <a href="activity.html">
+         <div class="f-activity" title="activity">
+            <img src="{% static 'images/footer icons/footer-likes.png' %}" alt="activity" class="small-img">
+         </div>
+      </a>
+
+      <a href="{% url 'user-profile' %}">
+         <div class="f-profile" title="profile">
+            <img src="{% static 'images/footer icons/footer-user.png' %}" alt="profile" class="small-img">
+         </div>
+      </a>
+   </div>
+</footer>
+<!-- Footer Section End -->

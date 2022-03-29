@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+{% include 'components/header-component.html' %}
+
+
+   <main>
+      <div class="welcome-user height-p-10">
+         <h3>Welcome {{request.user|title}}</h3>
+      </div>
+
+      {% include 'components/feed.html' %}
+
+      <section class="done grey">
+         <h3>No new posts</h3>
+      </section>
+   </main>
+
+{% include 'components/footer-component.html' %}
+
+   <!-- Post Floater Container -->
+{% endblock %}

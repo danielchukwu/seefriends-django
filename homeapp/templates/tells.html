@@ -1,0 +1,114 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+   <!-- Header Section -->
+   <header>
+      <div class="header-wrapper width-p-20 height-p-10">
+         <div class="header-1">
+            <a href="/">
+               <div class="activity-logo">
+                  <h3 class="tells-logo">Tells</h3>
+                  <a href="tell-form.html"><img src="{% static 'images/footer icons/footer-tells.png' %}" alt="Activity logo" class="activity-log-img"></a>
+               </div>
+            </a>
+         </div>
+         <div class="header-2">
+            <a href="chat.html">
+               <div class="inbox">
+                  <img src="{% static 'images/footer icons/footer-inbox.png' %}" alt="user">
+               </div>
+            </a>
+         </div>
+      </div>
+   </header>
+   <!-- Header Section -->
+
+
+   <!-- Main Section -->
+   <main class="background-white">
+      <section class="tell-wrapper width-p-20">
+         <div class="tells">
+
+            {% for tell in tells %}
+            <div class="content-wrapper-comment">
+               <div class="content-box">
+      
+                  <div class="content-2 no-borders">
+                     <div class="content-layer-1">
+                        <div class="cl-left flex">
+                           <div class="img-holder">
+                              <img src="{{tell.owner.profile.img.url}}" alt="" class="img-holder-image">
+                           </div>
+                           <div class="content-owner">
+                              <a href="{% url 'other-profile' tell.owner.id %}"><h3>{{tell.owner}}
+                                 
+                                 {% if tell.owner.profile.verified %}
+                                 <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
+                                 {% endif %}
+                              </h3></a>
+                           </div>
+                        </div>
+                        <div class="cl-right">
+                           <p>{{tell.get_total_likes}} like{{tell.get_total_likes|pluralize}}</p>
+                              {% if request.user not in tell.likers.all %}
+                              <a href="{% url 'like-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-black.png' %}" alt="" class="heart-tell"></a>
+                              {% else %}
+                              <a href="{% url 'unlike-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="heart-tell"></a>
+                              {% endif %}
+                        </div>
+                     </div>
+                     <div class="content-layer-2">
+
+                        <p>{{tell.body}}</p>
+                     </div>
+                     {% for comment in tell.commentontell_set.all|slice:":1" %}
+                     <div class="content-layer-3">
+                        <p><strong><a href="{% url 'other-profile' comment.owner.id %}">{{comment.owner}}</a> </strong>{{comment.comment}}</p>
+                     </div>
+                     {% endfor %}
+                     <div class="content-layer-4-updated flex">
+                        {% if tell.commentontell_set.all.count > 1 %}
+                        <a href="{% url 'tell-comments-page' tell.id %}?q={{request.path}}">
+                           <p class="grey">See {{tell.commentontell_set.all.count|add:-1}} other comment{{tell.commentontell_set.all.count|add:-1|pluralize}}</p>
+                        </a>
+                        {% elif tell.commentontell_set.all.count > 0 %}
+                        <p class="grey">0 other comments</p>
+                        {% else %}
+                        <p class="grey">No comment</p>
+                        {% endif %}
+                        <a href="{% url 'tell-comments-page' tell.id %}?q={{request.path}}"><span class="comment-button">comment</span></a>
+                     </div>
+                  </div>
+                  <div class="content-layer-0">
+                     <div class="cl1-left">
+                        <a href="#"><img src="{% static 'images/icons/send/send.png' %}" alt="" title="respond to post"></a>
+                        <a href="#"><strong class="font-lobster" title="tell on post">T</strong></a>
+                        <!-- <img src="images/icons/heart/heart-black.png" class="small-img" alt="" id="heart-btn" onclick="likeOrUnlike(true)"> -->
+                     </div>
+                     <div class="cl1-right">
+                        <img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt="">
+                     </div>
+                  </div>
+               </div>
+            </div>
+
+
+            <hr class="hr-line">
+            {% endfor %}
+
+         </div>
+         
+      </section>
+      
+      <section class="done grey">
+         <h3>No new posts</h3>
+      </section>
+   </main>
+   <!-- Main Section End -->
+   
+   {% include 'components/footer-component.html' %}
+
+   <!-- Post Floater Container -->
+{% endblock %}

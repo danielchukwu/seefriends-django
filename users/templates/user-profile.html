@@ -1,0 +1,163 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+{% include 'components/header-component.html' %}
+
+   <!-- Main Section -->
+   <main>
+      <section class="profile-header">
+         <div class="profile-layer-1">
+            <div class="profile-picture">
+               <img src="{{user.profile.img.url}}" alt="profile-picture">
+            </div>
+         </div>
+         <div class="profile-layer-2">
+            <div class="username">
+               <h2>@{{user.profile.username}}
+                  {% if user.profile.verified %}
+                  <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img" alt="verification">
+                  {% endif %}
+               </h2>
+            </div>
+            <small>{{user.profile.bio}}</small>
+         </div>
+         <div class="user-fcontainer">
+            {% if request.user == user %}
+            <div class="user-box">
+               <a href="{% url 'update-profile' %}">
+                  <div class="edit-profile-btn">
+                     <p class="no-margin">Edit Profile</p>
+                  </div>
+               </a>
+            </div>
+            {% elif request.user not in user.profile.followers.all %}
+            <div class="follow-box">
+               <a href="{% url 'follow' user.id %}">
+                  <div class="follow-btn">
+                     <p class="no-margin">follow</p>
+                  </div>
+               </a>
+            </div>
+            {% elif request.user in user.profile.followers.all %}
+            <div class="following-box">
+               <a href="{% url 'unfollow' user.id %}">
+                  <div class="following-btn">
+                     <p class="no-margin">following</p>
+                  </div>
+               </a>
+               <a href="#"><img src="{% static 'images/icons/user-icons/send.png' %}" class="small-img" alt=""></a>
+            </div>
+            {% endif %}
+         </div>
+         </div>
+         <div class="profile-layer-3">
+            <div class="followers-count">
+               <a href="">
+                  <p>{{user.profile.get_total_followers}}</p>
+                  <small>followers</small>
+               </a>
+            </div>
+            <div class="following-count">
+               <a href="#">
+                  <p>{{user.profile.get_total_following}}</p>
+                  <small>following</small>
+               </a>
+            </div>
+            <div class="following-count">
+               <a href="#">
+                  <p>{{user.profile.get_total_friends}}</p>
+                  <small>friends</small>
+               </a>
+            </div>
+            <!-- <hr> -->
+         </div>
+
+         <div class="filter-options width-p-20">
+            <div class="profile-posts">
+               <a href="{% url 'other-profile' user.id %}">
+                  <h4>Posts</h4>
+               </a>
+            </div>
+            <div class="tell">
+               <a href="{% url 'other-profile-tells' user.id %}">
+                  <h4>Tells</h4>
+               </a>
+            </div>
+            <div class="profile-all">
+               <a href="{% url 'saved-post-page' %}">
+                  <h4>Saved</h4>
+               </a>
+            </div>
+         </div>
+      </section>
+
+      {% include 'components/feed.html' %}
+      
+   </main>
+   <!-- Main Section End -->
+
+   <!-- Footer Section -->
+   <footer>
+      <div class="footer-wrapper height-p-10">
+         <a href="{% url 'home' %}">
+            <div class="f-feed" title="feed">
+               <img src="{% static 'images/footer icons/footer-feed.png' %}" alt="feed" class="small-img">
+            </div>
+         </a>
+   
+         <a href="{% url 'tells' %}">
+            <div class="f-tells" title="tells">
+               <img src="{% static 'images/footer icons/footer-tells.png' %}" alt="tells" class="small-img">
+            </div>
+         </a>
+         
+         <a href="">
+            <div class="post-button f-post" title="post">
+               <img src="{% static 'images/footer icons/footer-add.png' %}" alt="post" class="small-img">
+            </div>
+         </a>
+   
+         <a href="activity.html">
+            <div class="f-activity" title="activity">
+               <img src="{% static 'images/footer icons/footer-likes.png' %}" alt="activity" class="small-img">
+            </div>
+         </a>
+   
+         <a href="{% url 'user-profile' %}">
+            {% if request.user == user %}
+            <div class="user-button f-profile" title="profile">
+               <img src="{% static 'images/footer icons/footer-user.png' %}" alt="profile" class="small-img">
+            </div>
+            {% else %}
+            <div class="f-profile" title="profile">
+               <img src="{% static 'images/footer icons/footer-user.png' %}" alt="profile" class="small-img">
+            </div>
+            {% endif %}
+         </a>
+      </div>
+   </footer>
+   <!-- Footer Section End -->
+
+   <!-- Note: user-button: event handler only shows (edit-profile, settings, logout) when we have opened up the profile page and clicked on the icon a second time while still on the user-profile page. else it won't work-->
+
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+
+{% endblock content %}

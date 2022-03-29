@@ -1,0 +1,63 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+
+   <main>
+      {% if page == "login" %}
+      <!-- Login Page -->
+      <section class="auth-container">
+         <div class="sf-auth-logo">
+            <img src="{% static 'images/logos/seefriends-logo-4.png' %}" alt="seefriends logo">
+         </div>
+         <div class="auth-form">
+            <form action="" method="POST">
+               {% csrf_token %}
+               <input type="text" name="username" id="username" placeholder="username">
+               <input type="password" name="password" id="password" placeholder="password">
+               <input type="submit" value="Log in">
+            </form>
+         </div>
+
+         <small>Don't Have an accout? <strong><a href="{% url 'sign-up' %}">sign up</a></strong></small>
+      </section>
+      <!-- Login Page -->
+
+      
+      {% elif page == "register" %}
+      <!-- Register Page -->
+      <section class="auth-container">
+         <div class="sf-auth-logo">
+            <img src="{% static 'images/logos/seefriends-logo-4.png' %}" alt="seefriends logo">
+         </div>
+         
+         <div class="auth-form">
+            <form action="" method="POST">
+               {% csrf_token %}
+               <input type="text" name="first_name" id="name" placeholder="Name" required>
+               <input type="text" name="username" id="username" placeholder="Username" required>
+               <input type="text" name="email" id="email" placeholder="Email" required>
+               <input type="password" name="password1" id="password" placeholder="Password">
+               <input type="password" name="password2" id="Confirm-password" placeholder="Confirm Password">
+               <input type="submit" value="Register">
+               {% for field in form %}
+                  <!-- {{field.label}}
+                  {{field}} -->
+
+                  {{field.error}}
+               {% endfor %}
+               
+            </form>
+         </div>
+
+         <small>Already Have an accout? <strong><a href="{% url 'login' %}">login</a></strong></small>
+      </section>
+      <!-- Register Page -->
+
+      {% endif %}
+   </main>
+
+</body>
+{% endblock content %}
