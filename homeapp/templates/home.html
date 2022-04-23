@@ -7,18 +7,187 @@
 
 
    <main>
-      <div class="welcome-user height-p-10">
+      <div class="welcome-user pad-top-10">
          <h3>Welcome {{request.user|title}}</h3>
       </div>
 
-      {% include 'components/feed.html' %}
+      <section class="background-white mobile-page-center border-rad-20">
+      
+      {% for content in request.user.postfeed_set.all %}
 
-      <section class="done grey">
-         <h3>No new posts</h3>
+      <!-- <div class="content-wrapper">
+         <div class="content-box">
+
+            <div class="content-layer-1 fc-top">
+               <div class="cl-left flex">
+                  <div class="img-holder">
+                     <img src="{{content.post.owner.profile.img.url}}" alt="" class="img-holder-image">
+                  </div>
+                  <div class="content-owner">
+                     <a href="{% url 'other-profile' content.post.owner.id %}"><h3>{{content.post.owner}}</h3></a>
+                  </div>
+               </div>
+               <div class="cl-right">
+                  <a href="#"><img src="{% static 'images/icons/options/option-black.png' %}" alt=""></a>
+               </div>
+            </div>
+
+            <div class="content-1">
+               <div class="big-heart-parent">
+                  <img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="big-heart none">
+                  <img src="{{content.post.img.url}}" alt="post" ondblclick="heartPost()" class="post-img">
+               </div>
+               {% if request.user not in content.post.likers.all %}
+               <div class="heart-p position-rel">
+                  <a href="{% url 'like-post' content.post.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-white.png' %}" alt="" class="heart"></a>
+               </div>
+               {% else %}
+               <div class="heart-p position-rel">
+                  <a href="{% url 'unlike-post' content.post.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="heart"></a>
+               </div>
+               {% endif %}
+            </div>
+
+            <div class="content-2-updated ">
+               <div class="content-layer-0">
+                  <div class="cl0-left position-rel">
+                     <a href="#"><img src="{% static 'images/icons/send/send.png' %}" alt="" title="respond to post"></a>
+                     <a href="#"><strong class="font-lobster t" title="tell on post">T</strong></a>
+                  </div>
+                  <div class="cl0-right">
+                     <a href="#"><img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt=""></a>
+                  </div>
+               </div>
+               <div>
+                  <strong>{{content.post.get_total_likes}} like{{content.post.get_total_likes|pluralize}}</strong>
+               </div>
+               <div class="content-layer-2">
+                  <p class="no-margin no-margin"><strong><a href="{% url 'other-profile' content.post.owner.id %}">{{content.post.owner.profile.username}} </a></strong>{{content.post.body}}</p>
+               </div>
+               {% for comment in content.post.commentonpost_set.all|slice:1 %}
+               <div class="content-layer-3">
+                  <p class="no-margin pad-top-5">
+                     <a href="{% url 'other-profile' comment.owner.id %}"><strong>{{comment.owner}} 
+                        {% if comment.owner.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-10" alt="verification">
+                        {% endif %}
+                     </strong></a>{{comment.comment}}
+                  </p>
+               </div>
+               {% endfor %}
+
+               <div class="content-layer-4 flex">
+                  <a href="{% url 'post-comments-page' content.post.id %}">
+                     {% if content.post.commentonpost_set.all.count > 1 %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">See {{content.post.commentonpost_set.all.count|add:-1}} other comments</p>
+                     {% elif content.post.commentonpost_set.all.count > 0 %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">0 other comments</p>
+                     {% else %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">0 comment</p>
+                     {% endif %}
+                  </a>
+                  <small class="grey">{{content.post.get_time|lower}}</small>
+               </div>
+               
+            </div>
+         </div>
+      </div> -->
+
+
+      
+      <div class="content-wrapper">
+         <div class="content-box">
+
+            <div class="content-layer-1 fc-top">
+               <div class="cl-left flex">
+                  <div class="img-holder">
+                     <img src="{{content.post.owner.profile.img.url}}" alt="" class="img-holder-image">
+                  </div>
+                  <div class="content-owner">
+                     <a href="#"><h3>{{content.post.owner}}</h3></a>
+                  </div>
+               </div>
+               <div class="cl-right">
+                  <a href="{% url 'other-profile' content.post.owner.id %}"><img src="{% url 'other-profile' content.post.owner.id %}" alt=""></a>
+               </div>
+            </div>
+
+            <div class="content-1">
+               <div class="big-heart-parent">
+                  <img src="{% static 'images/icons/heart/heartr-256.png' %}" alt="" class="big-heart none">
+                  <img src="{{content.post.img.url}}" alt="post" class="post-img">
+               </div>
+               {% if request.user not in content.post.likers.all %}
+               <div class="heart-p position-rel">
+                  <img src="{% static 'images/icons/heart/heartw-32.png' %}" alt="" class="heartw" data-pid="{{content.post.id}}">
+                  <img src="{% static 'images/icons/heart/heartr-32.png' %}" alt="" class="heartr none" data-pid="{{content.post.id}}">
+               </div>
+               {% else %}
+               <div class="heart-p position-rel">
+                  <img src="{% static 'images/icons/heart/heartw-32.png' %}" alt="" class="heartw" data-pid="{{content.post.id}}">
+                  <img src="{% static 'images/icons/heart/heartr-32.png' %}" alt="" class="heartr" data-pid="{{content.post.id}}">
+               </div>
+               {% endif %}
+            </div>
+
+            <div class="content-2-updated">
+               <div class="content-layer-0 pad-top-5">
+                  <div class="cl1-left">
+                     <a href="#"><img src="{% static 'images/icons/send/send-16.png' %}" alt="" title="respond to post"></a>
+                     <p >5</p>
+                     <a href="#"><strong class="font-lobster" title="tell on">T</strong></a>
+                     <p>7</p>
+                     <img src="{% static 'images/icons/bookmark/bookmark-16.png' %}" title="save post">
+                     <p>6</p>
+                  </div>
+                  <div class="cl1-right pl-new">
+                     <strong class="like_count" id="">{{content.post.get_total_likes}} like{{content.post.get_total_likes|pluralize}}</strong>
+                  </div>
+               </div>
+               <div class="content-layer-2">
+                  <p class="no-margin"><strong><a href="{% url 'other-profile' content.post.owner.id %}">{{content.post.owner.profile.username}} </a></strong>{{content.post.body}}</p>
+               </div>
+               {% for comment in content.post.commentonpost_set.all|slice:1 %}
+               <div class="content-layer-3">
+                  <p class="no-margin pad-top-5">
+                     <a href="{% url 'other-profile' comment.owner.id %}">
+                        <strong>{{comment.owner}}
+                        {% if comment.owner.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-10" alt="verification">
+                        {% endif %}
+                        </strong>
+                     </a>
+                     {{comment.comment}}</p>
+               </div>
+               {% endfor %}
+
+               <div class="cl-4 flex pad-bot-20">
+                  <a href="{% url 'post-comments-page' content.post.id %}">
+                     {% if content.post.commentonpost_set.all.count > 1 %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">See {{content.post.commentonpost_set.all.count|add:-1}} other comments</p>
+                     {% elif content.post.commentonpost_set.all.count > 0 %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">0 other comments</p>
+                     {% else %}
+                     <p class="grey no-margin pad-top-5 pad-bot-5">0 comment</p>
+                     {% endif %}
+                  </a>
+                  <small class="grey">{{content.post.get_time|lower}}</small>
+               </div>
+               
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+
       </section>
+
    </main>
 
 {% include 'components/footer-component.html' %}
+
+{% block javascript %}
+<script src="{% static 'js/likepost.js' %}"></script>
+{% endblock %}
 
    <!-- Post Floater Container -->
 {% endblock %}

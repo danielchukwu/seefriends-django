@@ -9,24 +9,10 @@
 
          <header>
             <div class="header-wrapper width-p-20 height-p-10">
-               <div class="header-1">
-                  <div class="activity-logo">
-                     <h3 class="tells-logo">Comments</h3>
-                  </div>
+               <div class="pf-logo-container">
+                  <a onclick="history.back()"><img src="{% static 'images/icons/back icons/back-1.png' %}" alt="" width="25" class="pf-back"></a>
+                  <h3 class="no-margin font-25">Comments</h3>
                </div>
-               <div class="header-2">
-                  <div id="comment-out" class="inbox">
-                     {% if request.GET.q %}
-                     <a href="{{request.GET.q}}">
-                        <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
-                     </a>
-                     {% else %}
-                     <a href="{% url 'home' %}">
-                        <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
-                     </a>
-                     {%endif%}
-                  </div>
-                  </div>
             </div>
          </header>
          
@@ -36,10 +22,11 @@
                <div class="content-2 no-borders width-p-10">
                   <div class="content-layer-1">
                      <div class="cl-left flex">
-                        <img src="{{post.owner.profile.img.url}}" alt="" class="profile-pic">
+                        <div class="img-holder">
+                           <img src="{{post.owner.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                        </div>
                         <div class="content-owner">
                            <a href="{% url 'other-profile' post.owner.id %}"><h3>{{post.owner}}
-                              
                               {% if post.owner.profile.verified %}
                               <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
                               {% endif %}
@@ -58,7 +45,7 @@
                      </div>
                   </div>
                   <div class="content-layer-2">
-                     <p>{{post.body}}</p>
+                     <p class="no-margin">{{post.body}}</p>
                   </div>
                </div>
                <hr>
@@ -66,8 +53,14 @@
                <div class="comment-wrapper">
                   {% for comment in post.commentonpost_set.all %}
                   <div class="a_comment">
-                     <img src="{{comment.owner.profile.img.url}}" alt="" class="profile-pic">
-                     <p><a href="{% url 'other-profile' comment.owner.id %}"><strong>{{comment.owner}}</strong> </a>{{comment.comment}}</p>
+                     <div class="img-holder">
+                        <img src="{{comment.owner.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                     </div>
+                     <p><a href="{% url 'other-profile' comment.owner.id %}"><strong>{{comment.owner}}
+                        {% if comment.owner.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-10" alt="verification">
+                        {% endif %} 
+                     </strong> </a>{{comment.comment}}</p>
                   </div>
                   {% endfor %}
    

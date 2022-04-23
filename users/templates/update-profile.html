@@ -7,20 +7,11 @@
    <!-- Header Section -->
    <header>
       <div class="header-wrapper width-p-20 height-p-10">
-         <div class="header-1">
-            <a href="{% url 'home' %}">
-               <div class="logo">
-                  <!-- <img src="{% static 'images/logos/seefriends-logo-4.png' %}" alt="seefriends logo"> -->
-                  <h3 class="no-margin" style="font-family: Roboto;">Edit Profile</h3>
-               </div>
-            </a>
-         </div>
          <div class="header">
-            <a href="{% url 'user-profile' %}">
-               <div class="inbox">
-                  <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
-               </div>
-            </a>
+            <div class="pf-logo-container">
+               <a href="{% url 'user-profile' %}"><img src="{% static 'images/icons/back icons/back-1.png' %}" alt="" width="25" class="pf-back"></a>
+               <h3 class="no-margin font-25">Edit Profile</h3>
+            </div>
          </div>
       </div>
    </header>

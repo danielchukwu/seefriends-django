@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   <!-- Header Section -->
+   {% include 'components/msg-header.html' %}
+
+   <!-- Main Section -->
+   <main>
+      <section class="inbox-menu">
+         <div class="inbox-options">
+            <a href="{% url 'chat' %}">
+               <div class="chat-c"><h4 class="no-margin">CHATS</h4>
+                  {% if chats_count > 0 %}
+                  <span>{{chats_count}}</span>
+                  {% endif %}
+               </div>
+            </a>
+            <a href="{% url 'feed' %}">
+               <div class="feed-c pick"><h4 class="no-margin black">FEED</h4></div>
+            </a>
+            <a href="{% url 'friends' %}">
+               <div class="friends-c"><h4 class="no-margin">FRIENDS</h4></div>
+            </a>
+         </div>
+      </section>
+      
+      <section class="feed-container">
+         {% include 'components/feed.html' %}
+      </section>
+
+   </main>
+   <!-- Main Section End -->
+
+      <!-- Footer Section -->
+      {% include 'components/footer-component.html' %}
+      <!-- Footer Section End -->
+   
+      <!-- Post Floater Container -->
+      <div class="floater-container collapse">
+         <div class="floater-exit"></div>
+         
+         <div class="floater-box">
+            <div class="floater-bottom-options">
+               <hr class="hr-mini-bar">
+               <div class="options">
+                  <!-- Options are added using Javascript -->
+   
+   
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Post Floater Container -->
+   
+   
+</body>
+
+{% endblock content %}

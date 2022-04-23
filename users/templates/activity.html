@@ -1,0 +1,343 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   <!-- Header Section -->
+   <header>
+      <div class="header-wrapper width-p-20 height-p-10">
+         <div class="header-1">
+            <a href="/">
+            <div class="activity-logo">
+               <h3 class="no-margin font-lobster">Activity</h3>
+               <img src="{% static 'images/footer icons/footer-likes.png' %}" alt="Activity logo" class="activity-log-img">
+            </div>
+         </a>
+         </div>
+         <div class="header-2">
+            <a href="{% url 'chat' %}">
+               <div class="inbox">
+                  {% include 'components/chats_button.html' %}
+               </div>
+            </a>
+         </div>
+      </div>
+   </header>
+   <!-- Header Section End! -->
+
+   <!-- Main Section -->
+   <main>
+      <section>
+         <!-- following -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>daniellchukwu </strong> started following you and 2 others</p>
+            </div>
+         </div> -->
+
+         <!-- post likes -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>kate </strong> liked your post</p>
+            </div>
+            <div class="activity-right-info">
+               <div class="img-holder">
+                  <img src="images/content/content3.jpg" alt="" class="liked-image">
+               </div>
+            </div>
+         </div> -->
+
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>johnvladmir </strong> liked your post and 1600 others</p>
+            </div>
+            <div class="activity-right-info">
+               <div class="img-holder">
+                  <img src="images/content/content3.jpg" alt="" class="liked-image">
+               </div>
+            </div>
+         </div> -->
+
+         <!-- post comments -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>johnvladmir </strong> commented on your post</p>
+            </div>
+            <div class="activity-right-info">
+               <div class="img-holder">
+                  <img src="images/content/content3.jpg" alt="" class="liked-image">
+               </div>
+            </div>
+         </div> -->
+
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>johnvladmir </strong> commented on your post with 4 others</p>
+            </div>
+            <div class="activity-right-info">
+               <div class="img-holder">
+                  <img src="images/content/content3.jpg" alt="" class="liked-image">
+               </div>
+            </div>
+         </div> -->
+         <!-- Tell coments -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>bobby </strong> commented on your tell</p>
+            </div>
+            <div class="activity-right-info font-lobster">
+               <strong>T</strong>
+            </div>
+         </div> -->
+
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>bobby portis </strong> commented on your tell with 4 others.</p>
+            </div>
+            <div class="activity-right-info font-lobster">
+               <strong>T</strong>
+            </div>
+         </div> -->
+            
+         <!-- Tell likes -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>bobby portis </strong> liked your tell.</p>
+            </div>
+            <div class="activity-right-info font-lobster">
+               <strong>T</strong>
+            </div>
+         </div> -->
+
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>bobby portis </strong>liked your tell with 4 others.</p>
+            </div>
+            <div class="activity-right-info font-lobster">
+               <strong>T</strong>
+            </div>
+         </div> -->
+
+         <!-- Friend Texted You -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <div>
+                  <p style="color: rgb(14, 202, 14);" class="no-margin"><strong>Adam Zirra</strong> texted you.</p>
+                  <p class="no-margin"><small>Nonso how tomorrow go be. I for like show....</small></p>
+               </div>
+            </div>
+            <div class="activity-right-info">
+               <small>19:03</small>
+               <div class="message-count-box">
+                  <small>50</small>
+               </div>
+            </div>
+         </div> -->
+
+         <!-- Meessage Request -->
+         <!-- <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+               </div>
+               <p><strong>bobby portis </strong>sent you a message request</p>
+            </div>
+            <div class="activity-right-info">
+               <a href="chat.html">
+                  <div class="inbox width-p-5">
+                     <img src="images/icons/send/send.png" alt="user">
+                  </div>
+               </a>
+            </div>
+         </div> -->
+      </section>
+
+      <section class="activity-wrapper">
+      {% for activity in  request.user.activity_set.all %}
+         {% if activity.activity_type == 'like_post' %}
+
+         <div class="activity">
+            <a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}">
+               <div class="activity-2">
+                  <div class="img-holder">
+                     <img src="{{activity.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </div>
+                  <p><strong>{{activity.user.username}} 
+                     {% if activity.user.profile.verified %}
+                        <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-13" alt="verification">
+                     {% endif %}
+                     </strong> liked your post. <small class="grey font-10">{{activity.get_time}}</small></p>
+               </div>
+            </a>
+            <a href="{% url 'single-post' activity.post.id %}?q={{request.path}}">
+               <div class="activity-right-info">
+                  <div class="img-holder">
+                     <img src="{{activity.post.img.url}}" alt="" class="liked-image">
+                  </div>
+               </div>
+            </a>
+         </div>
+         {% endif %}
+
+         {% if activity.activity_type == 'like_tell' %}
+
+         <a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}">
+            <div class="activity">
+               <div class="activity-2">
+                  <div class="img-holder">
+                     <img src="{{activity.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </div>
+                  <p><strong>{{activity.user.username}} 
+                     {% if activity.user.profile.verified %}
+                        <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-13" alt="verification">
+                     {% endif %}
+                  </strong> liked your tell. <small class="grey font-10">{{activity.get_time}}</small></p>
+               </div>
+            </a>
+            <a href="{% url 'single-tell' activity.tell.id %}?q={{request.path}}">
+               <div class="activity-right-info font-lobster">
+                  <strong>T</strong>
+               </div>
+            </a>
+         </div>
+
+         {% endif %}
+
+
+         {% if activity.activity_type == 'comment_post' %}
+
+         <div class="activity">
+            <a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="{{activity.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+               </div>
+               <div>
+                  <p class="no-margin"><strong>{{activity.user.username}} 
+                     {% if activity.user.profile.verified %}
+                        <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-13" alt="verification">
+                     {% endif %}
+                  </strong>commented <small class="grey font-10">{{activity.get_time}}</small></p>
+                  <p class="no-margin"><small>{{activity.comment_post.comment|slice:":38"}}..</small></p>
+               </div>
+            </div>
+            </a>
+            <a href="{% url 'single-post' activity.post.id %}?q={{request.path}}">
+               <div class="activity-right-info">
+                  <div class="img-holder">
+                     <img src="{{activity.post.img.url}}" alt="" class="liked-image">
+                  </div>
+               </div>
+            </a>
+         </div>
+         
+         {% endif %}
+
+         {% if activity.activity_type == 'comment_tell' %}
+
+         <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}">
+                     <img src="{{activity.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </a>
+               </div>
+               <div>
+                  <p class="no-margin"><a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}"><strong>{{activity.user.username}} 
+                     {% if activity.user.profile.verified %}
+                        <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-13" alt="verification">
+                     {% endif %}
+                  </strong></a>commented <small class="grey font-10">{{activity.get_time}}</small></p>
+                  <p class="no-margin"><small>{{activity.comment_tell.comment|slice:":40"}}..</small></p>
+               </div>
+            </div>
+            <a href="{% url 'single-tell' activity.tell.id %}?q={{request.path}}">
+               <div class="activity-right-info font-lobster">
+                  <strong>T</strong>
+               </div>
+            </a>
+         </div>
+
+         {% endif %}
+
+         {% if activity.activity_type == 'follow' %}
+
+         <div class="activity">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}">
+                     <img src="{{activity.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </a>
+               </div>
+               <p><a href="{% url 'other-profile' activity.user.id %}?q={{request.path}}"><strong>{{activity.user.username}} 
+                  {% if activity.user.profile.verified %}
+                     <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-13" alt="verification">
+                  {% endif %}
+                  </strong></a> <a href="{% url 'followers' request.user.id %}?q={{request.path}}"></a>started following you <small class="grey font-10">{{activity.get_time}}</small></p>
+               </a>
+            </div>
+         </div>
+
+         {% endif %}
+         
+      {% endfor %}
+      </section>
+   </main>
+   <!-- Main Section end -->
+
+   <!-- Footer Section -->
+   {% include 'components/footer-component.html' %}
+   <!-- Footer Section End -->
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+
+
+</body>
+
+{% endblock content %}

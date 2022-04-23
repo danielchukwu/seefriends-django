@@ -1,24 +1,22 @@
+import imp
 from importlib.resources import contents
 from multiprocessing import context
 from urllib import request
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from homeapp.forms import PostForm
+from messagesapp.utils import returnChatsCount
+from users.models import Profile
 
 # Create your views here.
-from .models import CommentOnPost, Post, Tell, CommentOnTell
+from .models import Activity, CommentOnPost, Post, Search, Tell, CommentOnTell
 from itertools import chain
 import random
 
-tells = [
-   {"id": 1, "tell": "I just saw a blind guy independently buy himself pizza"},
-   {"id": 2, "tell": "Who wants to join me on a note worthy trip to my village next week"},
-   {"id": 3, "tell": "God is good. I will make it out of this. The Lord is my the strength!"}
-]
-
-
+from .utils import *
 
 # 
 # 
@@ -31,7 +29,7 @@ def tellsPage(request):
    
    user = request.user
    userfollows = user.profile.following.all()
-   print(f"following: {userfollows}")
+   # print(f"following: {userfollows}")
 
    for tell in request.user.tell_set.all()[:1]:
       if tell not in user.profile.seen_tell.all():
@@ -40,18 +38,18 @@ def tellsPage(request):
    # logic: iterate over people user follows to get thier current post and old post
    seen = request.user.profile.seen_tell.all()
    for user in userfollows:
-      print(f"\nIteration: {user}")
+      # print(f"\nIteration: {user}")
       following_tell = Tell.objects.filter(owner = user)[:5]
       # user_tell = request.user.tell_set.all()
       for tell in following_tell:
          # print(f"feed tells: {tell}")
          if tell not in seen:
             request.user.profile.seen_tell.add(tell)
-   
-   
-   # print(f"SEEN: {seen}")
 
-   context = {'tells': request.user.profile.seen_tell.all()}
+   # logic: chats count to display chat count
+   chats_count = returnChatsCount(request)     # logic: gets chats count
+
+   context = {'tells': request.user.profile.seen_tell.all(), 'chats_count': chats_count}
    return render(request, 'tells.html', context)
 
 # like
@@ -62,8 +60,12 @@ def likeTell(request, pk):
    # print("Like\n", participants)
    if request.user not in participants:
       tell.likers.add(request.user)
-      # print("Like\n", participants)
-      tell.save()
+      activity, created = Activity.objects.get_or_create(owner=tell.owner, user=request.user, activity_type="like_tell", tell=tell, liker_tell=request.user)
+      if created:
+         tell.owner.profile.activity_count = tell.owner.profile.activity_count + 1
+         tell.owner.profile.save()
+         print(f"ACTIVITY_COUNT: {tell.owner.profile.activity_count}")
+
    return redirect(request.GET['q'])
 
 # unlike
@@ -90,8 +92,12 @@ def tellForm(request):
          body = request.POST.get('tell')
       )
       return redirect(tellsPage)
-   # print(request.POST)
-   return render(request, 'tell-form.html')
+   
+   # logic: chats count to display chat count
+   chats_count = returnChatsCount(request)     # logic: gets chats count
+
+   context = {'chats_count': chats_count}
+   return render(request, 'tell-form.html', context)
 
 # comments page
 @login_required(login_url="login")
@@ -110,11 +116,17 @@ def addTellComment(request, pk):
       # print("COMMENT:", add_comment)
       if len(add_comment) == 0:
          return redirect('tell-comments-page', pk)
-      CommentOnTell.objects.create(
+      comment = CommentOnTell.objects.create(
          owner = user,
          tell = tell_object,
          comment = add_comment
       )
+      activity, created = Activity.objects.get_or_create(owner=tell_object.owner, user=request.user, activity_type="comment_tell", tell=tell_object, comment_tell=comment)
+      if created:
+         tell_object.owner.profile.activity_count = tell_object.owner.profile.activity_count + 1
+         tell_object.owner.profile.save()
+         print(f"ACTIVITY_COUNT: {tell_object.owner.profile.activity_count}")
+
    return redirect('tell-comments-page', pk)
 
 
@@ -128,63 +140,51 @@ def addTellComment(request, pk):
 # POST
 @login_required(login_url="login")
 def home(request):
-   # posts = Post.objects.all().order_by("-created")
-   # tells = Tell.objects.all().order_by("-created")
-   # contents = list(chain(posts, tells))
+   "NOTE: its an amazing algorithm no need to write a new one. all you need is to update it with whatever you want whenever"
+   userfollows = request.user.profile.following.all()  # print(f"following: {userfollows}")
 
-   user = request.user
-   userfollows = user.profile.following.all()
-   print(f"following: {userfollows}")
+   # obj 1: get interested followings
+   interestedfollowings = returnInterestedFollowings(request, userfollows) # print(f"Views.. {interestedfollowings}")
 
-   # lists: that will contain the post for user account, and accounts who recently posted and ones whose post is not recent to user
-   my_post = []
-   for user_post in request.user.post_set.all():
-      if user_post not in user.profile.seen_post.all():
-         my_post.append(user_post)
-         user.profile.seen_post.add(user_post)
+   # obj 2: get post of interested followings
+   unseen, seen = returnPostsForFeed(request, interestedfollowings)
+
+   # obj 3: just because i don't have alot of users posting right now
+      # random.shuffle(unseen)
+   random.shuffle(seen)
+   contents = unseen + seen
+
+   chats_count = returnChatsCount(request)     # logic: gets chats count
    
-   new_feed = []
-   old_feed = []
-
-   # logic: iterate over people user follows to get thier current post and old post
-   for user in userfollows:
-      print(f"\nIteration: {user}")
-      following_post = Post.objects.filter(owner = user)[:]
-      for post in following_post:
-         print(f"feed posts: {post}")
-         seen_post = user.profile.seen_post.all()
-         if post not in seen_post:
-            new_feed.append(post)
-            user.profile.seen_post.add(post)
-         else:
-            old_feed.append(post)
-   
-   # logic: reversing and shuffling the feed
-   new_feed.reverse()
-   old_feed.reverse()
-   random.shuffle(new_feed)
-   random.shuffle(old_feed)
-   new_feed.extend(old_feed)
-
-   if my_post:
-      my_post.extend(new_feed)
-      contents = my_post
-   else:
-      contents = new_feed
-   
-   context = {'contents': contents}
+   context = {'contents': contents, 'chats_count': chats_count}
    return render(request, 'home.html', context)
+
+
+def singlePostPage(request, pk):
+   page = "post"
+   post = Post.objects.get(id=pk)
+   context = {'page': page, 'content': post}
+   return render(request, 'singles-page.html', context)
+
+def singleTellPage(request, pk):
+   tell = Tell.objects.get(id=pk)
+   context = {'content': tell}
+   return render(request, 'singles-page.html', context)
+
 
 # like
 @login_required(login_url="login")
 def likePost(request, pk):
    post = Post.objects.get(id=pk)
    participants = post.likers.all()
-   # print("Like\n", participants)
    if request.user not in participants:
       post.likers.add(request.user)
-      # print("Like\n", participants)
-      post.save()
+      activity, created = Activity.objects.get_or_create(owner=post.owner, user=request.user, activity_type="like_post", post=post, liker_post=request.user)
+      if created:
+         post.owner.profile.activity_count = post.owner.profile.activity_count + 1
+         post.owner.profile.save()
+         print(f"ACTIVITY_COUNT: {post.owner.profile.activity_count}")
+      
    return redirect(request.GET['q'])
 
 # ulike
@@ -215,7 +215,11 @@ def createPost(request):
          # print(post.owner)
          post.save()
          return redirect(home)
-   context = {'user': user}
+   
+   # logic: chats count to display chat count
+   chats_count = returnChatsCount(request)     # logic: gets chats count
+
+   context = {'user': user, 'chats_count': chats_count}
    return render(request, 'create-post.html', context)
 
 # comments page
@@ -229,15 +233,60 @@ def postCommentsPage(request, pk):
 @login_required(login_url="login")
 def addPostComment(request, pk):
    post_object = Post.objects.get(id=pk)
+   post_object.commenters.add(request.user)
+   post_object.save()
    if request.method == "POST":
       user = request.user
       add_comment = request.POST["comment"]
-      # print("COMMENT:", add_comment)
       if len(add_comment) == 0:
          return redirect('tell-comments-page', pk)
-      CommentOnPost.objects.create(
+      comment = CommentOnPost.objects.create(
          owner = user,
          post = post_object,
          comment = add_comment
       )
+      activity, created = Activity.objects.get_or_create(owner=post_object.owner, user=request.user, activity_type="comment_post", post=post_object, comment_post=comment)
+      if created:
+         post_object.owner.profile.activity_count = post_object.owner.profile.activity_count + 1
+         post_object.owner.profile.save()
+         print(f"ACTIVITY_COUNT: {post_object.owner.profile.activity_count}")
+      
    return redirect('post-comments-page', pk)
+
+
+
+
+# SECTION 3: Discover page
+def discoverPage(request):
+   post = sorted(Post.objects.all(), key=lambda x: random.random())
+   # print(f"Post: {post}")
+
+   context = {"post": post}
+   return render(request, 'discover.html', context)
+
+def searchPage(request):
+   #logic: get all the searches that has been clicked on by request.user
+   searchs = Search.objects.filter(owner=request.user) 
+
+   search = request.GET.get('search') if request.GET.get('search') != None else '   '
+
+   profiles = Profile.objects.filter(
+      Q(username__icontains = search) |
+      Q(name__icontains = search)
+   )
+   
+
+   context = {"profiles": profiles, "searchs": searchs, "sv": search}
+   return render(request, 'search.html', context)
+
+def pickedSearch(request, pk):
+   search, created = Search.objects.get_or_create(owner=request.user, user=User.objects.get(id=pk))
+   if created: print(f'Search Created: {search}')
+   else: search.save()
+   return redirect('other-profile', pk)
+
+def deleteSearch(request, pk):
+   search = Search.objects.get(id=pk)
+   search.delete()
+   
+   return redirect('search')

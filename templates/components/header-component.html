@@ -10,11 +10,13 @@
          </a>
       </div>
       <div class="header">
-         <a href="chat.html">
-            <div class="inbox">
-               <img src="{% static 'images/footer icons/footer-inbox.png' %}" alt="user">
-            </div>
-         </a>
+         <div class="inbox">
+            <a href="{% url 'discover' %}"><img src="{% static 'images/icons/search/search.png' %}" alt=""></a>
+            <a href="{% url 'chat' %}"><img src="{% static 'images/icons/send/send.png' %}" alt="user"></a>
+            {% if chats_count > 0 %}
+            <div class="red-circle red-circle-mp">{{chats_count}}</div>
+            {% endif %}
+         </div>
       </div>
    </div>
 </header>

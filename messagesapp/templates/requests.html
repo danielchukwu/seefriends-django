@@ -1,0 +1,135 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   <!-- Header Section -->
+   <header>
+      <div class="message-left bk-color-none">
+         <div class="back">
+            <a href="{% url 'chat' %}"><img src="{% static 'images/icons/back icons/back-1-white.png' %}" alt=""></a>
+         </div>
+         <div class="activity-2">
+            <h2 class="no-margin width-p-10"><strong>REQUESTS</strong></h2>
+         </div>
+      </div>
+   </header>
+   <!-- Header Section End -->
+
+   <!-- Main Section -->
+   <main>
+
+      <section class="request-wrapper mobile-page-center width-p-10">
+
+      {% for chat in chats %}
+
+      {% if chat.body_set.all.0.is_read == False %}
+      <a href="{% url 'request-message' chat.owner.id %}">
+      <div class="chat">
+         <div class="img-holder-c">
+            <img src="{{chat.owner.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+         </div>
+         <div class="chat-content">
+            <div class="c-top">
+               <h3 class="no-margin">{{chat.owner.profile.name|title}}
+                  {% if chat.owner.profile.verified %}
+                  <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                  {% endif %}
+               </h3>
+               <p class="grey-dark no-margin black">{{chat.last_body.created|date:"H:i"}}</p> <!-- message: msg.3 -->
+            </div>
+            <div class="c-bottom">
+               {% if chat.last_body.get_body_count > 35 %}
+               <p class="no-margin grey-dark black" style="overflow: hidden;">{{chat.last_body.body|slice:35}}...</p>
+               {% else %}
+               <p class="no-margin grey-dark black" style="overflow: hidden;">{{chat.last_body.body|slice:35}}</p>
+               {% endif %}
+               
+               <span class="chat-circle">{{chat.unread_messages}}</span>
+            </div>
+         </div>
+      </div>
+      </a>
+
+      {% else %}
+      
+      <a href="{% url 'request-message' chat.owner.id %}">
+      <div class="chat">
+         <div class="img-holder-c">
+            <img src="{{chat.owner.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+         </div>
+         <div class="chat-content">
+            <div class="c-top">
+               <h3 class="no-margin">{{chat.owner.profile.name|title}}
+                  {% if chat.owner.profile.verified %}
+                  <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                  {% endif %}
+               </h3>
+               <p class="grey-dark no-margin">{{chat.last_body.created|date:"H:i"}}</p> <!-- message: msg.3 -->
+            </div>
+            <div class="c-bottom">
+               {% if chat.last_body.get_body_count > 35 %}
+               <p class="no-margin grey-dark" style="overflow: hidden;">{{chat.last_body.body|slice:35}}...</p>
+               {% else %}
+               <p class="no-margin grey-dark" style="overflow: hidden;">{{chat.last_body.body}}</p>
+               {% endif %}
+               <!--  -->
+               {% if chat.last_body.owner == request.user %}
+
+               {% if chat.last_body.is_read %}
+               <span class="seen-flex">
+                  <div class="c1 msg-blue"></div>
+                  <div class="c1 msg-blue"></div>
+               </span>
+               {% else %}
+               <span class="seen-flex">
+                  <div class="c1"></div>
+                  <div class="c1"></div>
+               </span>
+               {% endif %}
+
+               {% endif %}
+            </div>
+         </div>
+      </div>
+      </a>
+
+      {% endif %}
+
+      {% endfor %}
+
+         
+
+      </section>
+
+   </main>
+   <!-- Main Section End -->
+
+      <!-- Footer Section -->
+      <footer>
+         {% include 'components/footer-component.html' %}
+      </footer>
+      <!-- Footer Section End -->
+   
+      <!-- Post Floater Container -->
+      <div class="floater-container collapse">
+         <div class="floater-exit"></div>
+         
+         <div class="floater-box">
+            <div class="floater-bottom-options">
+               <hr class="hr-mini-bar">
+               <div class="options">
+                  <!-- Options are added using Javascript -->
+   
+   
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Post Floater Container -->
+   
+   
+</body>
+
+{% endblock content %}

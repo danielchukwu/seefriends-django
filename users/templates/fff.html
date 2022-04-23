@@ -1,0 +1,230 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   
+<!-- Header Section -->
+<header>
+   <div class="header-wrapper width-p-20 height-p-10">
+      <div class="pf-logo-container">
+         <a onclick="history.back()"><img src="{% static 'images/icons/back icons/back-1.png' %}" alt="" width="25" class="pf-back"></a>
+         <h3 class="no-margin font-25">Edit Profile</h3>
+      </div>
+   </div>
+</header>
+<!-- Header Section End! -->
+
+<!-- Main Section -->
+<main>
+   <section class="fff-wrapper">
+      
+      <!-- following -->
+      <div class="activity fff-main-user">
+         <a href="{% url 'other-profile' user.id %}">
+            <div class="activity-2">
+               <div class="img-holder">
+                  <img src="{{user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+               </div>
+               <h3 class="no-margin width-p-10"><strong>{{user.username}}
+                  {% if user.profile.verified %}
+                     <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                  {% endif %}
+               </strong></h3>
+            </div>
+         </a>
+         
+         <div class="activity-right-info">
+            <div class="following-btn-fff">
+               <p class="no-margin">{{page}}...</p>
+            </div>
+         </div>
+      </div>
+
+      <hr class="hr-line">
+
+      
+      <!-- post likes -->
+      <!-- <div class="activity">
+         <div class="activity-2">
+            <div class="img-holder">
+               <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+            </div>
+            <p><strong>kate </strong></p>
+         </div>
+         <div class="activity-right-info">
+            <div class="following-btn-fff-sub">
+               <p class="no-margin">follower</p>
+            </div>
+         </div>
+      </div> -->
+
+      <!-- <div class="activity">
+         <div class="activity-2">
+            <div class="img-holder">
+               <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+            </div>
+            <p><strong>kate </strong></p>
+         </div>
+         <div class="activity-right-info">
+            <a href="">
+               <div class="follow-btn-fff-sub">
+                  <p class="no-margin">follow</p>
+               </div>
+            </a>
+         </div>
+      </div> -->
+
+      <!-- <div class="activity">
+         <div class="activity-2">
+            <div class="img-holder">
+               <img src="images/profile-pictures/trae-3.jpg" alt="profile-picture" class="img-holder-image">
+            </div>
+            <p><strong>kate </strong></p>
+         </div>
+         <div class="activity-right-info">
+            <a href="">
+               <div class="friends-btn-fff-sub">
+                  <p class="no-margin">friends</p>
+               </div>
+            </a>
+         </div>
+      </div> -->
+
+
+      {% if page == 'followers' %}
+      
+         {% for follower in followers %}
+         <div>
+            <div class="activity">
+               <div class="activity-2">
+                  <div class="img-holder">
+                     <img src="{{follower.me.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </div>
+                  <a href="{% url 'other-profile' follower.me.id %}?q={{request.path}}">
+                     <p><strong>{{follower.me.profile.username}} 
+                        {% if follower.me.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                        {% endif %}
+                     </strong></p>
+                  </a>
+               </div>
+      
+               {% if request.user != follower.me %}
+                  {% if request.user in follower.me.profile.followers.all %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'unfollow' follower.me.id %}?q={{request.GET.q}}">
+                        <div class="following-btn-fff-sub">
+                           <p class="no-margin">following</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% else %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'follow' follower.me.id %}?q={{request.GET.q}}">
+                        <div class="follow-btn-fff-sub">
+                           <p class="no-margin">follow</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% endif %}
+               {% endif %}
+            </div>
+         </div>
+         {% endfor %}
+
+      {% elif page == 'following' %}
+
+         {% for follow in following %}
+         <div>
+            <div class="activity">
+               <div class="activity-2">
+                  <div class="img-holder">
+                     <img src="{{follow.following.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </div>
+                  <a href="{% url 'other-profile' follow.following.id %}?q={{request.path}}">
+                     <p><strong>{{follow.following.profile.username}}
+                        {% if follow.following.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                        {% endif %}
+                     </strong></p>
+                  </a>
+               </div>
+      
+               {% if request.user != follow.following %}
+                  {% if request.user in follow.following.profile.followers.all %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'unfollow' follow.following.id %}?q={{request.path}}">
+                        <div class="following-btn-fff-sub">
+                           <p class="no-margin">following</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% else %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'follow' follow.following.id %}?q={{request.path}}">
+                        <div class="follow-btn-fff-sub">
+                           <p class="no-margin">follow</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% endif %}
+               {% endif %}
+            </div>
+         </div>
+         {% endfor %}
+
+      {% else %}
+
+      {% for friend in friends %}
+         <div>
+            <div class="activity">
+               <div class="activity-2">
+                  <div class="img-holder">
+                     <img src="{{friend.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                  </div>
+                  <a href="{% url 'other-profile' friend.id %}?q={{request.path}}">
+                     <p><strong>{{friend.profile.username}} 
+                        {% if friend.profile.verified %}
+                           <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                        {% endif %}
+                     </strong></p>
+                  </a>
+               </div>
+      
+               {% if request.user != friend %}
+                  {% if request.user in friend.profile.followers.all %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'unfollow' friend.id %}?q={{request.path}}">
+                        <div class="following-btn-fff-sub">
+                           <p class="no-margin">friends</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% else %}
+                  <div class="activity-right-info">
+                     <a href="{% url 'follow' friend.id %}?q={{request.path}}">
+                        <div class="follow-btn-fff-sub">
+                           <p class="no-margin">follow</p>
+                        </div>
+                     </a>
+                  </div>
+                  {% endif %}
+               {% endif %}
+            </div>
+         </div>
+         {% endfor %}
+
+
+      {% endif %}
+
+
+   </section>
+</main>
+
+</body>
+
+<!-- Main Section end -->
+
+{% endblock content %}

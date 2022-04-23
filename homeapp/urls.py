@@ -24,4 +24,13 @@ urlpatterns = [
 
 
    path('create-post/', views.createPost, name="create-post"),
+
+   path('single-post/<str:pk>/', views.singlePostPage, name="single-post"),
+   path('single-tell/<str:pk>/', views.singleTellPage, name="single-tell"),
+
+   path('discover/', views.discoverPage, name="discover"),
+   path('search/', views.searchPage, name="search"),
+
+   path('picked-search/<str:pk>/', views.pickedSearch, name="picked-search"),
+   path('delete-search/<str:pk>/', views.deleteSearch, name="delete-search"),
 ]

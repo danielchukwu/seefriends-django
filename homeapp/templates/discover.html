@@ -1,0 +1,129 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   <!-- Header Section -->
+   <header>
+      <div class="header-wrapper width-p-20 height-p-10">
+         <div class="header-1">
+            <a href="/">
+            <div class="activity-logo">
+               <h3 class="no-margin">Discover</h3>
+            </div>
+         </a>
+         </div>
+         <div class="header">
+            <a href="{% url 'search' %}">
+               <div class="inbox search-icon-an">
+                  <img src="{% static 'images/icons/search/search.png' %}" alt="user">
+               </div>
+            </a>
+         </div>
+      </div>
+   </header>
+   <!-- Header Section End! -->
+
+   <!-- Main Section -->
+   <main class="mobile-page-center">
+      <section class="discover-container">
+
+         <!-- 1 -->
+         <div class="d-wrapper1 d-wrapper flex">
+            <div class="long-square">
+               <a href="{% url 'single-post' post.0.id %}?q={{request.path}}"><img src="{{post.0.img.url}}" alt=""></a>
+            </div>
+            <div class="square-container">
+               <div class="sqw">
+                  <a href="{% url 'single-post' post.1.id %}?q={{request.path}}"><img src="{{post.1.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.2.id %}?q={{request.path}}"><img src="{{post.2.img.url}}" alt=""></a>
+               </div>
+               <div class="sqw">
+                  <a href="{% url 'single-post' post.3.id %}?q={{request.path}}"><img src="{{post.3.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.4.id %}?q={{request.path}}"><img src="{{post.4.img.url}}" alt=""></a>
+               </div>
+            </div>
+         </div>
+         
+         <!-- 2 -->
+         <div class="d-wrapper1 d-wrapper flex">
+            <div class="square-container-2">
+               <div class="sqw-2">
+                  <a href="{% url 'single-post' post.5.id %}?q={{request.path}}"><img src="{{post.5.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.6.id %}?q={{request.path}}"><img src="{{post.6.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.7.id %}?q={{request.path}}"><img src="{{post.7.img.url}}" alt=""></a>
+               </div>
+               <div class="sqw-2">
+                  <a href="{% url 'single-post' post.8.id %}?q={{request.path}}"><img src="{{post.8.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.9.id %}?q={{request.path}}"><img src="{{post.9.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.10.id %}?q={{request.path}}"><img src="{{post.10.img.url}}" alt=""></a>
+               </div>
+            </div>
+         </div>
+         
+         <!-- 3 -->
+         <div class="d-wrapper1 d-wrapper flex">
+            <div class="square-container">
+               <div class="sqw">
+                  <a href="{% url 'single-post' post.11.id %}?q={{request.path}}"><img src="{{post.11.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.12.id %}?q={{request.path}}"><img src="{{post.12.img.url}}" alt=""></a>
+
+               </div>
+               <div class="sqw">
+                  <a href="{% url 'single-post' post.13.id %}?q={{request.path}}"><img src="{{post.13.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.14.id %}?q={{request.path}}"><img src="{{post.14.img.url}}" alt=""></a>
+               </div>
+            </div>
+            <div class="long-square">
+               <a href="{% url 'single-post' post.15.id %}?q={{request.path}}"><img src="{{post.15.img.url}}" alt=""></a>
+            </div>
+         </div>
+         
+         <!-- 4 -->
+         <div class="d-wrapper1 d-wrapper flex">
+            <div class="square-container-2">
+               <div class="sqw-2">
+                  <a href="{% url 'single-post' post.16.id %}?q={{request.path}}"><img src="{{post.16.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.17.id %}?q={{request.path}}"><img src="{{post.17.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.18.id %}?q={{request.path}}"><img src="{{post.18.img.url}}" alt=""></a>
+
+               </div>
+               <div class="sqw-2">
+                  <a href="{% url 'single-post' post.19.id %}?q={{request.path}}"><img src="{{post.19.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.20.id %}?q={{request.path}}"><img src="{{post.20.img.url}}" alt=""></a>
+                  <a href="{% url 'single-post' post.21.id %}?q={{request.path}}"><img src="{{post.21.img.url}}" alt=""></a>
+
+               </div>
+            </div>
+         </div>
+      </section>
+      
+   </main>
+   <!-- Main Section end -->
+
+   <!-- Footer Section -->
+   {% include 'components/footer-component.html' %}
+   <!-- Footer Section End -->
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+
+
+</body>
+
+{% endblock content %}

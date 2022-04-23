@@ -13,12 +13,10 @@
          </div>
       </a>
       </div>
-      <div class="header-2">
-         <a href="chat.html">
-            <div class="inbox">
-               <img src="{% static 'images/footer icons/footer-inbox.png' %}" alt="user">
-            </div>
-         </a>
+      <div class="header">
+         <div class="inbox">
+            {% include 'components/chats_button.html' %}
+         </div>
       </div>
    </div>
 </header>

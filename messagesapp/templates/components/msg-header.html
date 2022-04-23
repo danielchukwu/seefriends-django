@@ -1,0 +1,44 @@
+{% load static %}
+
+<header>
+   <div class="header-wrapper width-p-20 height-p-20 theme-darkest-blue">
+      <div class="header-1">
+         <a href="/">
+            <div class="logo">
+               <img src="{% static 'images/logos/seefriends-logo-4-white.png' %}" alt="seefriends logo">
+            </div>
+         </a>
+         
+      </div>
+      <div class="msg-mr">
+         <a href="{% url 'requests' %}">
+            <span class="msg-rcontainer">
+               <img src="{% static 'images/icons/request/user-rwhite.png' %}" alt="" class="msg-r">
+               {% if requests_count > 0 %}
+               <div class="msg-rcount">{{requests_count}}</div>
+               {% endif %}
+         </a>
+         <a href="#" class="options-link">
+            <img src="{% static 'images/icons/options/option-white-32.png' %}" alt="" class="width-20">
+         </a>
+      </div>
+   </div>
+</header>
+
+<!-- <section class="inbox-menu">
+   <div class="inbox-options">
+      <a href="{% url 'chat' %}">
+         <div class="chat-c pick"><h4 class="no-margin black">CHATS</h4>
+            {% if chats_count > 0 %}
+            <span>{{chats_count}}</span>
+            {% endif %}
+         </div>
+      </a>
+      <a href="{% url 'feed' %}">
+         <div class="feed-c"><h4 class="no-margin">FEED</h4></div>
+      </a>
+      <a href="{% url 'friends' %}">
+         <div class="friends-c"><h4 class="no-margin">FRIENDS</h4></div>
+      </a>
+   </div>
+</section> -->

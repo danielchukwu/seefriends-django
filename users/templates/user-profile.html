@@ -3,7 +3,24 @@
 
 {% block content %}
 
-{% include 'components/header-component.html' %}
+<header>
+   <div class="header-wrapper width-p-20 height-p-10">
+      <div class="header-1">
+         <div class="pf-logo-container">
+            <a onclick="history.back()"><img src="{% static 'images/icons/back icons/back-1.png' %}" alt="" width="25" class="pf-back"></a>
+            <h3 class="no-margin font-25">{{user.profile.name|title}}</h3>
+         </div>
+      </div>
+      <div class="header">
+         <div class="inbox">
+            <a href="{% url 'chat' %}"><img src="{% static 'images/icons/send/send.png' %}" alt="user"></a>
+            {% if chats_count > 0 %}
+            <div class="red-circle red-circle-mp">{{chats_count}}</div>
+            {% endif %}
+         </div>
+      </div>
+   </div>
+</header>
 
    <!-- Main Section -->
    <main>
@@ -21,7 +38,9 @@
                   {% endif %}
                </h2>
             </div>
+            {% if user.profile.bio %}
             <small>{{user.profile.bio}}</small>
+            {% endif %}
          </div>
          <div class="user-fcontainer">
             {% if request.user == user %}
@@ -47,26 +66,26 @@
                      <p class="no-margin">following</p>
                   </div>
                </a>
-               <a href="#"><img src="{% static 'images/icons/user-icons/send.png' %}" class="small-img" alt=""></a>
+               <a href="{% url 'message' user.id %}"><img src="{% static 'images/icons/user-icons/send.png' %}" class="small-img" alt=""></a>
             </div>
             {% endif %}
          </div>
          </div>
          <div class="profile-layer-3">
             <div class="followers-count">
-               <a href="">
+               <a href="{% url 'followers' user.id %}?q={{request.path}}">
                   <p>{{user.profile.get_total_followers}}</p>
                   <small>followers</small>
                </a>
             </div>
             <div class="following-count">
-               <a href="#">
+               <a href="{% url 'following' user.id %}?q={{request.path}}">
                   <p>{{user.profile.get_total_following}}</p>
                   <small>following</small>
                </a>
             </div>
             <div class="following-count">
-               <a href="#">
+               <a href="{% url 'friends' user.id %}?q={{request.path}}">
                   <p>{{user.profile.get_total_friends}}</p>
                   <small>friends</small>
                </a>
@@ -75,21 +94,49 @@
          </div>
 
          <div class="filter-options width-p-20">
-            <div class="profile-posts">
-               <a href="{% url 'other-profile' user.id %}">
-                  <h4>Posts</h4>
-               </a>
-            </div>
-            <div class="tell">
-               <a href="{% url 'other-profile-tells' user.id %}">
-                  <h4>Tells</h4>
-               </a>
-            </div>
-            <div class="profile-all">
-               <a href="{% url 'saved-post-page' %}">
-                  <h4>Saved</h4>
-               </a>
-            </div>
+            {% if page == 'user-post' %}
+
+               <div class="profile-posts">
+                  <a href="{% url 'other-profile' user.id %}">
+                     <h4>Posts</h4>
+                  </a>
+               </div>
+               <div class="tell">
+                  <a href="{% url 'other-profile-tells' user.id %}">
+                     <h4 class="grey-dark">Tells</h4>
+                  </a>
+               </div>
+               
+               {% if user == request.user %}
+               <div class="profile-all">
+                  <a href="{% url 'saved-post-page' %}">
+                     <h4 class="grey-dark">Saved</h4>
+                  </a>
+               </div>
+               {% endif %}
+            
+            {% else %}
+            
+               <div class="profile-posts">
+                  <a href="{% url 'other-profile' user.id %}">
+                     <h4 class="grey-dark">Posts</h4>
+                  </a>
+               </div>
+               <div class="tell">
+                  <a href="{% url 'other-profile-tells' user.id %}">
+                     <h4>Tells</h4>
+                  </a>
+               </div>
+               
+               {% if user == request.user %}
+               <div class="profile-all">
+                  <a href="{% url 'saved-post-page' %}">
+                     <h4 class="grey-dark">Saved</h4>
+                  </a>
+               </div>
+               {% endif %}
+
+            {% endif %}
          </div>
       </section>
 
@@ -119,9 +166,12 @@
             </div>
          </a>
    
-         <a href="activity.html">
+         <a href="{% url 'activity' %}">
             <div class="f-activity" title="activity">
                <img src="{% static 'images/footer icons/footer-likes.png' %}" alt="activity" class="small-img">
+               {% if request.user.profile.activity_count > 0 %}
+               <div class="red-circle red-circle-ac">{{request.user.profile.activity_count}}</div>
+               {% endif %}
             </div>
          </a>
    

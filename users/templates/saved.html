@@ -7,19 +7,9 @@
 <!-- Header Section -->
 <header>
    <div class="header-wrapper width-p-20 height-p-10">
-      <div class="header-1">
-         <a href="/">
-         <div class="activity-logo">
-            <h3 class="no-margin"> SAVED</h3>
-         </div>
-      </a>
-      </div>
-      <div class="header">
-         <a href="{% url 'user-profile' %}">
-            <div class="inbox">
-               <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
-            </div>
-         </a>
+      <div class="pf-logo-container">
+         <a onclick="history.back()"><img src="{% static 'images/icons/back icons/back-1.png' %}" alt="" width="25" class="pf-back"></a>
+         <h3 class="no-margin font-25">SAVED</h3>
       </div>
    </div>
 </header>
@@ -72,17 +62,21 @@
                      <!-- <img src="images/icons/heart/heart-black.png" class="small-img" alt="" id="heart-btn" onclick="likeOrUnlike(true)"> -->
                   </div>
                   <div class="cl0-right">
-                     <a href="{% url 'save-post' content.id %}"><img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt=""></a>
+                     {% if content.post not in request.user.profile.saved_post.all %}
+                     <a href="{% url 'save-post' content.post.id %}"><img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt=""></a>
+                     {% else %}
+                     <a href="{% url 'unsave-post' content.post.id %}"><img src="{% static 'images/icons/bookmark/bookmark-black.png' %}" alt=""></a>
+                     {% endif %}
                   </div>
                </div>
 
                <div class="content-layer-1">
                   <div class="cl-left flex">
                      <div class="img-holder">
-                        <img src="{{content.owner.profile.img.url}}" alt="" class="img-holder-image">
+                        <img src="{{content.post.owner.profile.img.url}}" alt="" class="img-holder-image">
                      </div>
                      <div class="content-owner">
-                        <a href="{% url 'other-profile' content.owner.id %}"><h3>{{content.owner}}
+                        <a href="{% url 'other-profile' content.owner.id %}"><h3>{{content.post.owner}}
                            {% if content.owner.profile.verified %}
                            <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img-feed" alt="verification">
                            {% endif %}
@@ -172,10 +166,10 @@
                      <!-- <img src="images/icons/heart/heart-black.png" class="small-img" alt="" id="heart-btn" onclick="likeOrUnlike(true)"> -->
                   </div>
                   <div class="cl1-right">
-                     {% if content.id in request.user.profile.saved_tell.all %}
-                     <a href=""><img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt=""></a>
+                     {% if content.tell not in request.user.profile.saved_tell.all %}
+                     <a href="{% url 'save-tell' content.tell.id %}"><img src="{% static 'images/icons/bookmark/bookmark.png' %}" alt=""></a>
                      {% else %}
-                     <a href=""><img src="{% static 'images/icons/bookmark/bookmark-black.png' %}" alt=""></a>
+                     <a href="{% url 'unsave-tell' content.tell.id %}"><img src="{% static 'images/icons/bookmark/bookmark-black.png' %}" alt=""></a>
                      {% endif %}
                   </div>
                </div>

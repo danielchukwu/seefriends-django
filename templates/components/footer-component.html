@@ -21,9 +21,12 @@
          </div>
       </a>
 
-      <a href="activity.html">
+      <a href="{% url 'activity' %}">
          <div class="f-activity" title="activity">
             <img src="{% static 'images/footer icons/footer-likes.png' %}" alt="activity" class="small-img">
+            {% if request.user.profile.activity_count > 0 %}
+            <div class="red-circle red-circle-ac">{{request.user.profile.activity_count}}</div>
+            {% endif %}
          </div>
       </a>
 

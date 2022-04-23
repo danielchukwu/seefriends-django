@@ -20,7 +20,15 @@ urlpatterns = [
 
    path('saved-post/', views.savedPostPage, name="saved-post-page"),
    path('save-post/<str:pk>/', views.savePost, name="save-post"),
+   path('unsave-post/<str:pk>/', views.unsavePost, name="unsave-post"),
 
    path('saved-tell/', views.savedTellPage, name="saved-tell-page"),
    path('save-tell/<str:pk>/', views.saveTell, name="save-tell"),
+   path('unsave-tell/<str:pk>/', views.unsaveTell, name="unsave-tell"),
+
+   path('followers/<str:pk>/', views.followersPage, name='followers'),
+   path('following/<str:pk>/', views.followingPage, name='following'),
+   path('friends/<str:pk>/', views.friendsPage, name='friends'),
+
+   path('activity/', views.activityPage, name="activity")
 ]

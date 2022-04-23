@@ -1,0 +1,109 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-white">
+   
+   <!-- Header Section -->
+   <header>
+      <div class="header-wrapper width-p-10 height-p-10 border-none">
+         <div class="header">
+            <a href="{% url 'discover' %}">
+               <div class="search">
+                  <img src="{% static 'images/icons/back icons/back-1.png' %}" alt="user">
+               </div>
+            </a>
+         </div>
+         <form action="" method="GET" class="search">
+            <input type="text" name="search" value="" id="search" placeholder="Search" autocomplete="off">
+         </form>
+      </div>
+   </header>
+   <!-- Header Section End! -->
+
+   <!-- Main Section -->
+   <main>
+      <div class="search-container">
+         {% if not profiles %}
+         <div class="search-title width-p-20 pad-bot-10">
+            <h2 class="no-margin">Recent</h2>
+         </div>
+         
+         {% for search in searchs %}
+         <a href="{% url 'picked-search' search.user.profile.user.id %}">
+            <div class="search-wrapper">
+               <div class="activity fff-main-user">
+                  <div class="activity-2">
+                     <div class="img-holder-2">
+                        <img src="{{search.user.profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                     </div>
+                     <div class="search-info">
+                        <h3 class="no-margin width-p-10"><strong>{{search.user.profile.username}}
+                           {% if search.user.profile.verified %}
+                              <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                           {% endif %}
+                        </strong></h3>
+                        <small class="no-margin grey">{{search.user.profile.name}}</small>
+                     </div>
+                  </div>
+                  <a href="{% url 'delete-search' search.id %}">
+                     <img src="{% static 'images/icons/cancel/close.png' %}" alt="" class="width-10 pad-bot-5px">
+                  </a>
+               </div>
+            </div>
+         </a>
+         {% endfor %}
+         
+         {% endif %}
+         
+         {% for profile in profiles %}
+         <a href="{% url 'picked-search' profile.user.id %}">
+            <div class="search-wrapper">
+               <div class="activity fff-main-user">
+                  <div class="activity-2">
+                     <div class="img-holder-2">
+                        <img src="{{profile.img.url}}" alt="profile-picture" class="img-holder-image">
+                     </div>
+                     <div class="search-info">
+                        <h3 class="no-margin width-p-10"><strong>{{profile.username}}
+                           {% if profile.verified %}
+                              <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="width-15" alt="verification">
+                           {% endif %}
+                        </strong></h3>
+                        <small class="no-margin grey">{{profile.name}}</small>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </a>
+         {% endfor %}
+
+      </div>
+
+   </main>
+   <!-- Main Section end -->
+
+   <!-- Footer Section -->
+   {% include 'components/footer-component.html' %}
+   <!-- Footer Section End -->
+
+   <!-- Post Floater Container -->
+   <div class="floater-container collapse">
+      <div class="floater-exit"></div>
+      
+      <div class="floater-box">
+         <div class="floater-bottom-options">
+            <hr class="hr-mini-bar">
+            <div class="options">
+               <!-- Options are added using Javascript -->
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+   <!-- Post Floater Container -->
+</body>
+
+{% endblock content %}

@@ -1,0 +1,165 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+
+<body class="background-off-white">
+   <!-- Header Section -->
+   <header>
+      <div class="message-header">
+         <div class="message-left">
+            <div class="back">
+               <a href="{% url 'requests' %}"><img src="{% static 'images/icons/back icons/back-1-white.png' %}" alt=""></a>
+            </div>
+            <div class="activity-2">
+               <div class="img-holder-m">
+                  <img src="{{user.profile.img.url}}" alt="profile-picture" class="img-holder-image-m">
+               </div>
+               <h2 class="no-margin width-p-10"><strong>{{user.profile.name}}</strong></h2>
+            </div>
+         </div>
+         <a href="#" class="options-link">
+            <div class="message-right">
+               <img src="" alt="">
+            </div>
+         </a>
+      </div>
+   </header>
+   <!-- Header Section End -->
+
+
+   <!-- Main Section -->
+   <main class="pad-bot-100">
+      <section class="profile-header request-profile">
+         <div class="profile-layer-1">
+            <div class="profile-picture">
+               <img src="{{user.profile.img.url}}" alt="profile-picture">
+            </div>
+         </div>
+         <div class="profile-layer-2">
+            <div class="username">
+               <h2>@{{user.profile.username}}
+                  {% if user.profile.verified %}
+                  <img src="{% static 'images/icons/verified/verified-blue2.png' %}" class="small-img" alt="verification">
+                  {% endif %}
+               </h2>
+            </div>
+            {% if user.profile.bio %}
+            <small>{{user.profile.bio}}</small>
+            {% endif %}
+         </div>
+         <div class="user-fcontainer">
+            {% if request.user == user %}
+            <div class="user-box">
+               <a href="{% url 'update-profile' %}">
+                  <div class="edit-profile-btn">
+                     <p class="no-margin">Edit Profile</p>
+                  </div>
+               </a>
+            </div>
+            {% elif request.user not in user.profile.followers.all %}
+            <div class="follow-box">
+               <a href="{% url 'follow' user.id %}">
+                  <div class="follow-btn">
+                     <p class="no-margin">follow</p>
+                  </div>
+               </a>
+            </div>
+            {% elif request.user in user.profile.followers.all %}
+            <div class="following-box">
+               <a href="{% url 'unfollow' user.id %}">
+                  <div class="following-btn">
+                     <p class="no-margin">following</p>
+                  </div>
+               </a>
+               <a href="{% url 'message' user.id %}"><img src="{% static 'images/icons/user-icons/send.png' %}" class="small-img" alt=""></a>
+            </div>
+            {% endif %}
+         </div>
+      </section>
+      
+      <div class="timestamp-holder">
+         <span class="timestamp">
+            <strong>Welcome</strong>
+         </span>
+      </div>
+
+      {% for body in bodys %}
+
+      {% if body.owner == request.user %}
+      <div class="msg-block-me">
+         <div class="msg-box-me">
+            <p class="no-margin">
+               <span>{{body.body}}</span> 
+               <small class="msg-time grey">{{body.created|date:"H:i"}}</small>
+            </p>
+         </div>
+         {% if body.is_read %}
+         <div class="msg-seen">
+            <div class="c1 msg-blue"></div>
+            <div class="c1 msg-blue"></div>
+         </div>
+         {% else %}
+         <div class="msg-seen">
+            <div class="c1"></div>
+            <div class="c1"></div>
+         </div>
+         {% endif %}
+      </div>
+
+      {% else %}
+      
+      <div class="msg-block">
+         <div class="msg-box">
+            <p class="no-margin">
+               <span>{{body.body}}</span>
+               <small class="msg-time grey">{{body.created|date:"H:i"}}</small>
+            </p>
+         </div>
+      </div>
+
+      {% endif %}
+
+
+      {% endfor %}
+
+      <br>
+
+   </main>
+   <!-- Main Section End -->
+
+
+      <!-- Footer Section -->
+      <footer>
+         <section class="accept-or-reject">
+            <p>What would you like to do with this request?</p>
+            <div class="request-options">
+               <a href="{% url 'accept-request' user.id %}"><span class="accept-r">Accept</span></a>
+               <a href="#"><span class="reject-r">Reject</span></a>
+            </div>
+         </section>
+      </footer>
+      <!-- Footer Section End -->
+   
+      
+      <!-- Post Floater Container -->
+      <div class="floater-container collapse">
+         <div class="floater-exit"></div>
+         
+         <div class="floater-box">
+            <div class="floater-bottom-options">
+               <hr class="hr-mini-bar">
+               <div class="options">
+                  <!-- Options are added using Javascript -->
+   
+   
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Post Floater Container -->
+   
+   
+</body>
+
+{% endblock content %}
