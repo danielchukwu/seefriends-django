@@ -175,8 +175,6 @@ class UserFollowing(models.Model):
    def __str__(self):
       return f"{self.me} following -> {self.following}"
 
-
-
 class Settings(models.Model):
    owner = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
    # CHATS

@@ -96,7 +96,7 @@
 
       
       <div class="content-wrapper">
-         <div class="content-box">
+         <div class="content-box"  data-pid="{{content.post.id}}">
 
             <div class="content-layer-1 fc-top">
                <div class="cl-left flex">
@@ -137,11 +137,12 @@
                      <p >5</p>
                      <a href="#"><strong class="font-lobster" title="tell on">T</strong></a>
                      <p>7</p>
+                     
                      <img src="{% static 'images/icons/bookmark/bookmark-16.png' %}" title="save post">
                      <p>6</p>
                   </div>
                   <div class="cl1-right pl-new">
-                     <strong class="like_count" id="">{{content.post.get_total_likes}} like{{content.post.get_total_likes|pluralize}}</strong>
+                     <strong class="like_count" id="">{{content.post.get_total_likes}}</strong>
                   </div>
                </div>
                <div class="content-layer-2">
@@ -164,11 +165,11 @@
                <div class="cl-4 flex pad-bot-20">
                   <a href="{% url 'post-comments-page' content.post.id %}">
                      {% if content.post.commentonpost_set.all.count > 1 %}
-                     <p class="grey no-margin pad-top-5 pad-bot-5">See {{content.post.commentonpost_set.all.count|add:-1}} other comments</p>
+                     <small class="grey no-margin pad-top-5 pad-bot-5">{{content.post.commentonpost_set.all.count|add:-1}} other comments</small>
                      {% elif content.post.commentonpost_set.all.count > 0 %}
-                     <p class="grey no-margin pad-top-5 pad-bot-5">0 other comments</p>
+                     <small class="grey no-margin pad-top-5 pad-bot-5">no other comments</small>
                      {% else %}
-                     <p class="grey no-margin pad-top-5 pad-bot-5">0 comment</p>
+                     <small class="grey no-margin pad-top-5 pad-bot-5">no comments</small>
                      {% endif %}
                   </a>
                   <small class="grey">{{content.post.get_time|lower}}</small>

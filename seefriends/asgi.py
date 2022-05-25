@@ -15,6 +15,7 @@ from channels.auth import AuthMiddlewareStack
 
 import messagesapp.routing
 import users.routing
+import homeapp.routing
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'seefriends.settings')
 
@@ -22,7 +23,7 @@ application = ProtocolTypeRouter({
    'http': get_asgi_application(),
    'websocket': AuthMiddlewareStack(
       URLRouter(
-         messagesapp.routing.websocket_urlpatterns + users.routing.websocket_urlpatterns
+         messagesapp.routing.websocket_urlpatterns + users.routing.websocket_urlpatterns  + homeapp.routing.websocket_urlpatterns
       )
    )
 })

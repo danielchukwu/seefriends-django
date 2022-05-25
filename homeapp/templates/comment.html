@@ -19,7 +19,7 @@
          <div class="comment-floater-box">
             <div class="content-wrapper">
                
-               <div class="content-2 no-borders width-p-10">
+               <div class="content-2 no-borders width-p-10 pad-top-15">
                   <div class="content-layer-1">
                      <div class="cl-left flex">
                         <div class="img-holder">
@@ -34,19 +34,22 @@
                            </h3></a>
                         </div>
                      </div>
-                     <div class="cl-right">
-                        <p>{{tell.get_total_likes}}</p>
-                        <a href="#">
-                           {% if request.user not in tell.likers.all %}
-                           <a href="{% url 'like-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-black.png' %}" alt="" class="heart-tell"></a>
-                           {% else %}
-                           <a href="{% url 'unlike-tell' tell.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="heart-tell"></a>
-                           {% endif %}
-                        </a>
+                     {% if request.user not in tell.likers.all %}
+                     <div class="tcon" data-tid="{{tell.id}}">
+                        <img src="{% static 'images/icons/heart/heartb-16.png' %}" class="theartb" alt="like">
+                        <img src="{% static 'images/icons/heart/heartr-16.png' %}" class="theartr none" alt="dislike">
+                        <small><strong class="lcount">{{tell.get_total_likes}}</strong></small>
                      </div>
+                     {% else %}
+                     <div class="tcon" data-tid="{{tell.id}}">
+                        <img src="{% static 'images/icons/heart/heartb-16.png' %}" class="theartb none" alt="like">
+                        <img src="{% static 'images/icons/heart/heartr-16.png' %}" class="theartr" alt="dislike">
+                        <small><strong class="lcount text-pink">{{tell.get_total_likes}}</strong></small>
+                     </div>
+                     {% endif %}
                   </div>
                   <div class="content-layer-2">
-                     <p>{{tell.body}}</p>
+                     <p class="no-margin pad-top-10">{{tell.body}}</p>
                   </div>
                </div>
                <hr>

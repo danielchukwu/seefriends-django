@@ -7,5 +7,5 @@ const onlineSocket = new WebSocket(url_online)
 
 onlineSocket.onmessage = function (e) {
    data = JSON.parse(e.data)
-   // console.log('Online:', data)
+   console.log('Online:', data)
 }

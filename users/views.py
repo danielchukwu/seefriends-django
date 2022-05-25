@@ -316,7 +316,7 @@ def friendsPage(request, pk):
 
 
 
-# SECTION 7: ACTIVITY PAGE
+# SECTION 7: ACTIVITY PAGE............
 def activityPage(request):
    profile = request.user.profile
    profile.activity_count = 0

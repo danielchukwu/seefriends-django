@@ -88,6 +88,9 @@ hr {
   color: #fff;
 }
 
+.grey {
+  color: #92a9bd;
+}
 
 .grey-dark {
   color: #6c7780;
@@ -169,6 +172,9 @@ hr {
 .pad-top-5 {
   padding-top: 5px;
 }
+.pad-top-15 {
+  padding-top: 15px;
+}
 .pad-top-10 {
   padding-top: 10px;
   /* font-size: 20px; */
@@ -195,14 +201,6 @@ hr {
 a {
   text-decoration: none;
   color: #000;
-}
-
-.grey {
-  color: #92a9bd;
-}
-
-.content-layer-4-updated a {
-  color: #92a9bd;
 }
 
 .flex {
@@ -343,7 +341,11 @@ header {
 
 /* MAIN */
 main {
-  margin-top: 53px;
+  margin-top: 54px;
+}
+
+main {
+  margin-top: 54px;
 }
 
 .welcome-user {
@@ -359,7 +361,7 @@ main {
   /* background-color: #1b1a17; */
   margin: 0 auto;
   max-width: 550px;
-  box-shadow: 0 -0.1px rgb(0 0 0 / 22%);
+  box-shadow: 0 -1px rgba(0, 0, 0, 0.224);
 }
 .content-wrapper-tells {
   /* background-color: #1b1a17; */
@@ -1396,7 +1398,7 @@ width: 15px; */
 
 .comment-floater-box {
   box-sizing: border-box;
-  padding: 60px 10px 5px;
+  padding: 75px 10px 5px;
   height: 100%;
   width: 100%;
   background-color: #fff;

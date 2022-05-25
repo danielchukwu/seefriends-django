@@ -1,9 +1,9 @@
 //JS - javascript
 // purpose - to implement a like and dislike logic
-console.log('liketell.js live')
+console.log('likepostcomment.js live')
 
-let returnLikeTellSocket = function (id) {
-   let url_lp = `ws://${window.location.host}/ws/liketell/${id}/`
+let returnLikePostSocket = function (id) {
+   let url_lp = `ws://${window.location.host}/ws/likepost/${id}/`
    return new WebSocket(url_lp)
 }
 
@@ -21,9 +21,9 @@ for(let i=0; i<tcon.length; i++){
       lcount.classList.add('text-pink')
 
       // like logic
-      let likeTellSocket = returnLikeTellSocket(tid)
-      likeTellSocket.onopen = function () {
-         likeTellSocket.send(JSON.stringify({
+      let likePostSocket = returnLikePostSocket(tid)
+      likePostSocket.onopen = function () {
+         likePostSocket.send(JSON.stringify({
             'type': 'like'
          }))
       }
@@ -37,9 +37,9 @@ for(let i=0; i<tcon.length; i++){
       lcount.classList.remove('text-pink')
       
       // like logic
-      let likeTellSocket = returnLikeTellSocket(tid)
-      likeTellSocket.onopen = function () {
-         likeTellSocket.send(JSON.stringify({
+      let likePostSocket = returnLikePostSocket(tid)
+      likePostSocket.onopen = function () {
+         likePostSocket.send(JSON.stringify({
             'type': 'dislike'
          }))
       }

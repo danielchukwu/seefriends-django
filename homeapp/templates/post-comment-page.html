@@ -33,19 +33,22 @@
                            </h3></a>
                         </div>
                      </div>
-                     <div class="cl-right">
-                        <p>{{post.get_total_likes}}</p>
-                        <a href="#">
-                           {% if request.user not in post.likers.all %}
-                           <a href="{% url 'like-post' post.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-black.png' %}" alt="" class="heart-tell"></a>
-                           {% else %}
-                           <a href="{% url 'unlike-post' post.id %}?q={{request.path}}"><img src="{% static 'images/icons/heart/heart-red.png' %}" alt="" class="heart-tell"></a>
-                           {% endif %}
-                        </a>
+                     {% if request.user not in post.likers.all %}
+                     <div class="tcon" data-tid="{{post.id}}">
+                        <img src="{% static 'images/icons/heart/heartb-16.png' %}" class="theartb" alt="like">
+                        <img src="{% static 'images/icons/heart/heartr-16.png' %}" class="theartr none" alt="dislike">
+                        <small><strong class="lcount">{{post.get_total_likes}}</strong></small>
                      </div>
+                     {% else %}
+                     <div class="tcon" data-tid="{{post.id}}">
+                        <img src="{% static 'images/icons/heart/heartb-16.png' %}" class="theartb none" alt="like">
+                        <img src="{% static 'images/icons/heart/heartr-16.png' %}" class="theartr" alt="dislike">
+                        <small><strong class="lcount text-pink">{{post.get_total_likes}}</strong></small>
+                     </div>
+                     {% endif %}
                   </div>
                   <div class="content-layer-2">
-                     <p class="no-margin">{{post.body}}</p>
+                     <p class="no-margin pad-top-10">{{post.body}}</p>
                   </div>
                </div>
                <hr>
@@ -85,3 +88,7 @@
    <!-- Comment Floater Container -->
 
 {% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/likepostcomments.js' %}"></script>
+{% endblock %}

@@ -25,6 +25,9 @@ urlpatterns = [
     path('', include("homeapp.urls")),
     path('users/', include("users.urls")),
     path('messages/', include("messagesapp.urls")),
+
+    path('api/', include('homeapp.api.urls')),
+    path('api/users/', include('users.api.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
