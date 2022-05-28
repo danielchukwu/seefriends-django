@@ -25,6 +25,7 @@ def getUser(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getActivities(request):
+   print("I AM HERE ............................................................")
    if (request.user):
       profile = request.user.profile
       profile.activity_count = 0
