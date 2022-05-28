@@ -25,7 +25,6 @@ def getUser(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getActivities(request):
-   print("I AM HERE ............................................................")
    if (request.user):
       profile = request.user.profile
       profile.activity_count = 0
@@ -36,6 +35,11 @@ def getActivities(request):
    serializer = ActivitySerializer(activities, many=True)
    return Response(serializer.data)
 
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def getTest(request):
+   print("I AM HERE ............................................................")
+   return Response(["It Works\' by his GRACE!"])
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
