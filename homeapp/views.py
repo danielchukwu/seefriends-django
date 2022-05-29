@@ -205,16 +205,12 @@ def unlikePost(request, pk):
 @login_required(login_url="login")
 def createPost(request):
    user = request.user
-   # print(request.user)
    form = PostForm()
    if request.method == "POST":
       form = PostForm(request.POST, request.FILES)
       if form.is_valid:
-         # print("reques.POST: ", request.POST)
-         # print("request.FILES: ", request.FILES)
          post = form.save(commit=False)
          post.owner = user
-         # print(post.owner)
          post.save()
          return redirect(home)
    
