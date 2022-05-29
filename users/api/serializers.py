@@ -1,4 +1,4 @@
-from homeapp.models import Activity, CommentOnPost, Post
+from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
 from rest_framework import serializers
 from users.models import Profile
 from django.contrib.auth.models import User
@@ -59,13 +59,13 @@ class ActivitySerializer(serializers.ModelSerializer):
          return str(comment)
 
 
+
 class CommentPostSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
 
    class Meta:
       model = CommentOnPost
       fields = '__all__'
-
 class PostSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
    comments = serializers.SerializerMethodField()
@@ -84,3 +84,24 @@ class PostSerializer(serializers.ModelSerializer):
       date = obj.get_date
       return date
 
+
+
+class CommentTellSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+
+   class Meta:
+      model = CommentOnTell
+      fields = '__all__'
+class TellSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+   comments = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Tell
+      fields = '__all__'
+
+   def get_comments(self, obj):
+      comments = obj.commentontell_set.all()
+      # print(f"Comments: {comments}")
+      serializer = CommentTellSerializer(comments, many=True)
+      return serializer.data

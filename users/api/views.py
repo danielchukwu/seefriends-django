@@ -1,4 +1,4 @@
-from .serializers import ActivitySerializer, PostSerializer, UserSerializer
+from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
 from django.contrib.auth.models import User
 
 from rest_framework.decorators import api_view, permission_classes
@@ -35,11 +35,6 @@ def getActivities(request):
    serializer = ActivitySerializer(activities, many=True)
    return Response(serializer.data)
 
-@api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-def getTest(request):
-   print("I AM HERE ............................................................")
-   return Response(["It Works\' by his GRACE!"])
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -47,4 +42,14 @@ def getUserPost(request, pk):
    user = User.objects.get(id=pk)
    posts = user.post_set.all()
    serializer = PostSerializer(posts, many=True)
+   return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getUserTells(request, pk):
+   user = User.objects.get(id=pk)
+   tells = user.tell_set.all()
+   print("tells:", tells)
+   serializer = TellSerializer(tells, many=True)
    return Response(serializer.data)

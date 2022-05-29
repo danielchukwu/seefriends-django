@@ -8,4 +8,5 @@ urlpatterns = [
    path('activity/', views.getActivities),
    path('<str:pk>/', views.getUser),
    path('<str:pk>/posts/', views.getUserPost),
+   path('<str:pk>/tells/', views.getUserTells),
 ]
