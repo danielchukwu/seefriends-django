@@ -24,7 +24,7 @@ def getRoutes(requet):
    return Response(routes)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def getPosts(request):
    if (request.method == "GET"):
@@ -41,9 +41,16 @@ def getPosts(request):
       return Response({"message":"successful"})
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def getTells(request):
-   tells = Tell.objects.all()
-   serializer = TellSerializer(tells, many=True)
-   return Response(serializer.data)
+   if (request.method == "GET"):
+      tells = Tell.objects.all()
+      serializer = TellSerializer(tells, many=True)
+      return Response(serializer.data)
+   elif (request.method == "POST"):
+      Tell.objects.create(
+         owner = request.user,
+         body = request.data['body']
+      )
+      return Response({"message":"successful"})
