@@ -210,6 +210,8 @@ def createPost(request):
    if request.method == "POST":
       form = PostForm(request.POST, request.FILES)
       if form.is_valid:
+         # print("reques.POST: ", request.POST)
+         # print("request.FILES: ", request.FILES)
          post = form.save(commit=False)
          post.owner = user
          # print(post.owner)
