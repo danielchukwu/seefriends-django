@@ -53,3 +53,23 @@ def getUserTells(request, pk):
    print("tells:", tells)
    serializer = TellSerializer(tells, many=True)
    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getSavedPosts(request):
+   if (request.method == "GET"):
+      saved_post = request.user.profile.saved_post.all()
+      print(saved_post)
+      serializer = PostSerializer(saved_post, many=True)
+      # print("saved_post:", saved_post)
+      return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getSavedTells(request):
+   saved_tell = request.user.profile.saved_tell.all()
+   serializer = TellSerializer(saved_tell, many=True)
+   print("saved_tell:", saved_tell)
+   return Response(serializer.data)
+
