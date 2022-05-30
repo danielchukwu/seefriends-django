@@ -73,3 +73,27 @@ def getSavedTells(request):
    print("saved_tell:", saved_tell)
    return Response(serializer.data)
 
+# fff
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getFollowers(request, pk):
+   followers = User.objects.get(id=pk).profile.followers.all()
+   serializer = UserSerializer(followers, many=True)
+   print("followers:", followers)
+   return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getFollowings(request, pk):
+   followings = User.objects.get(id=pk).profile.following.all()
+   serializer = UserSerializer(followings, many=True)
+   print("followings:", followings)
+   return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getFriends(request, pk):
+   friends = User.objects.get(id=pk).profile.friends.all()
+   serializer = UserSerializer(friends, many=True)
+   print("friends:", friends)
+   return Response(serializer.data)
