@@ -1,4 +1,7 @@
+from users.models import UserFollower, UserFollowing
 from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
+from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
+
 from django.contrib.auth.models import User
 
 from rest_framework.decorators import api_view, permission_classes
@@ -7,21 +10,18 @@ from rest_framework.response import Response
 
 from users.api import serializers
 
+
 # create your user views here
 
+
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def getOwner(request):
    user = request.user
    serializer= UserSerializer(user, many=False)
    return Response(serializer.data)
 
-@api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
-def getUser(request, pk):
-   user = User.objects.get(id=pk)
-   serializer = UserSerializer(user, many=False)
-   return Response(serializer.data)
-
+# Activity
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getActivities(request):
@@ -35,6 +35,13 @@ def getActivities(request):
    serializer = ActivitySerializer(activities, many=True)
    return Response(serializer.data)
 
+# User Profile
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def getUser(request, pk):
+   user = User.objects.get(id=pk)
+   serializer = UserSerializer(user, many=False)
+   return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -70,8 +77,9 @@ def getSavedPosts(request):
 def getSavedTells(request):
    saved_tell = request.user.profile.saved_tell.all()
    serializer = TellSerializer(saved_tell, many=True)
-   print("saved_tell:", saved_tell)
+   # print("saved_tell:", saved_tell)
    return Response(serializer.data)
+
 
 # fff
 @api_view(['GET'])
@@ -79,7 +87,7 @@ def getSavedTells(request):
 def getFollowers(request, pk):
    followers = User.objects.get(id=pk).profile.followers.all()
    serializer = UserSerializer(followers, many=True)
-   print("followers:", followers)
+   # print("followers:", followers)
    return Response(serializer.data)
 
 @api_view(['GET'])
@@ -87,7 +95,7 @@ def getFollowers(request, pk):
 def getFollowings(request, pk):
    followings = User.objects.get(id=pk).profile.following.all()
    serializer = UserSerializer(followings, many=True)
-   print("followings:", followings)
+   # print("followings:", followings)
    return Response(serializer.data)
 
 @api_view(['GET'])
@@ -95,5 +103,96 @@ def getFollowings(request, pk):
 def getFriends(request, pk):
    friends = User.objects.get(id=pk).profile.friends.all()
    serializer = UserSerializer(friends, many=True)
-   print("friends:", friends)
+   # print("friends:", friends)
    return Response(serializer.data)
+
+
+# Follow & Unfollow logic
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def follow(request, pk):
+   # logic: user & profile
+   user = User.objects.get(id=pk)   # user to be followed
+   profile = user.profile           # user to be followed profile
+
+   # stop if user === request.user
+   if user == request.user:
+      return Response(["can't follow yourself!"])
+   elif request.user in profile.followers.all():
+      return Response(["already following!"])
+
+   # start following
+   profile.followers.add(request.user)       # user->profile-> become a follower
+   request.user.profile.following.add(user)  # request.user->profile-> start following
+
+   # logic: if both users are following each other -> become friends :: This is gr8 commenting nonso. I won't lie😉👍
+   friends = False
+   if request.user in profile.following.all():
+      request.user.profile.friends.add(user)
+      profile.friends.add(request.user)
+      friends = True
+
+   # logic: create following and follower model
+   UserFollowing.objects.create(
+      me = request.user,
+      following = user
+   )
+
+   UserFollower.objects.create(
+      me = request.user,
+      follower_to = user,
+   )
+
+   if friends:
+      Activity.objects.get_or_create(owner=user, user=request.user, activity_type="friends")  # Activity for the person followed
+      Activity.objects.get_or_create(owner=request.user, user=user, activity_type="friends")  # Activity for you the follower
+      profile.activity_count += 1  # increment the activity count of the person followed
+      request.user.profile.activity_count += 1  # increment the activity count for you the follower
+
+      profile.save()
+      request.user.profile.save()
+   else:
+      Activity.objects.get_or_create(owner=user, user=request.user, activity_type="follow")
+      profile.activity_count = profile.activity_count + 1
+      profile.save()
+   
+   return Response({"details":"successful!"})
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def unfollow(request, pk):
+   # logic: user & profile
+   user = User.objects.get(id=pk)    # user to be followed
+   profile = user.profile            # user to be followed profile
+
+   # stop if user === request.user
+   if user == request.user:
+      return Response(["can't follow yourself!"])
+   elif request.user not in profile.followers.all():
+      return Response(["not following already!"])
+   
+   # start unfollowing
+   profile.followers.remove(request.user)       # user->profile-> in user unfollow
+   request.user.profile.following.remove(user)  # request.user->profile-> in request.user unfollow
+
+   # logic: if a user is not following the other -> remove friendship
+   if request.user in profile.friends.all():
+      profile.friends.remove(request.user)
+      request.user.profile.friends.remove(user)
+   
+   # logic: delete following and follower model
+   following_model = UserFollowing.objects.get(me = request.user, following = user)
+   following_model.delete()
+
+   follower_model = UserFollower.objects.get(me = request.user, follower_to = user)
+   follower_model.delete()
+
+   # Logic: delete postsfeed and remove posts from seen
+   post_feed = PostFeed.objects.filter(post_owner=user)
+   for each_feed in post_feed:
+      request.user.profile.seen_post.remove(each_feed.post)
+      each_feed.delete()
+   
+   return Response({"details":"successful!"})
+

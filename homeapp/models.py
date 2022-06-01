@@ -281,7 +281,7 @@ class SaveTell(models.Model):
 class Activity(models.Model):
    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user", null=True)
-   activity_type = models.CharField(max_length=200, null=True, blank=True) # like_post, like_tell, comment_post, comment_tell, follow
+   activity_type = models.CharField(max_length=200, null=True, blank=True) # like_post, like_tell, comment_post, comment_tell, follow, new: friends
 
    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="post", null=True)
    tell = models.ForeignKey(Tell, on_delete=models.CASCADE, related_name="tell", null=True)
