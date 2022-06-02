@@ -35,6 +35,7 @@ class Profile(models.Model):
    seen_tell = models.ManyToManyField("homeapp.Tell", blank=True)
 
    activity_count = models.PositiveSmallIntegerField(default=0)
+   # unread_msg_count = models.PositiveSmallIntegerField(default=0)
 
    updated = models.DateTimeField(auto_now_add=True)
    created = models.DateTimeField(auto_now=True)

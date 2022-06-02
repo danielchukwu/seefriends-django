@@ -1,14 +1,26 @@
 from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
+from messagesapp.models import Message
+from messagesapp.utils import returnChatsCountApi
 from rest_framework import serializers
 from users.models import Profile
 from django.contrib.auth.models import User
 
 # create your user serializers over here
 
+class MessageSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Message
+      fields = '__all__'
 class ProfileSerializer(serializers.ModelSerializer):
+   msgcount = serializers.SerializerMethodField()
    class Meta:
       model = Profile
       fields = '__all__'
+
+   def get_msgcount(self, obj):
+      unread_msg = returnChatsCountApi(obj.user)
+      print(f"unread_messages: {unread_msg}")
+      return unread_msg
 
 class UserSerializer(serializers.ModelSerializer):
    profile = serializers.SerializerMethodField()
@@ -51,11 +63,11 @@ class ActivitySerializer(serializers.ModelSerializer):
    def get_comment(self, obj):
       if obj.activity_type == "comment_post":
          comment = obj.comment_post.comment
-         print('COMMENT: ', comment)
+         # print('COMMENT: ', comment)
          return str(comment)
       elif obj.activity_type == "comment_tell":
          comment = obj.comment_tell.comment
-         print('COMMENT: ', comment)
+         # print('COMMENT: ', comment)
          return str(comment)
 
 

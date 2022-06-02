@@ -57,6 +57,13 @@ def returnChatsCount(request):
 
    return chats_count
 
+def returnChatsCountApi(user):
+   chats_count = user.messages.filter(
+      Q (unread_messages__gt = 0) &
+      Q (request_accepted = True)).count()
+
+   return chats_count
+
 def returnRequestsCount(request):
    requests_count = request.user.messages.filter(
       Q (unread_messages__gt = 0) &

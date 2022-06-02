@@ -144,17 +144,20 @@ def follow(request, pk):
    )
 
    if friends:
-      Activity.objects.get_or_create(owner=user, user=request.user, activity_type="friends")  # Activity for the person followed
-      Activity.objects.get_or_create(owner=request.user, user=user, activity_type="friends")  # Activity for you the follower
-      profile.activity_count += 1  # increment the activity count of the person followed
-      request.user.profile.activity_count += 1  # increment the activity count for you the follower
-
-      profile.save()
-      request.user.profile.save()
+      otheru_activity, created1 = Activity.objects.get_or_create(owner=user, user=request.user, activity_type="friends")  # Activity for the person followed
+      my_activity, created2 = Activity.objects.get_or_create(owner=request.user, user=user, activity_type="friends")  # Activity for you the follower
+      if created1: 
+         profile.activity_count += 1  # increment the activity count of the person followed
+         profile.save()
+      if created2: 
+         request.user.profile.activity_count += 1  # increment the activity count for you the follower
+         request.user.profile.save()
+   
    else:
-      Activity.objects.get_or_create(owner=user, user=request.user, activity_type="follow")
-      profile.activity_count = profile.activity_count + 1
-      profile.save()
+      otheru_activity, created1 = Activity.objects.get_or_create(owner=user, user=request.user, activity_type="follow")
+      if created1: 
+         profile.activity_count = profile.activity_count + 1
+         profile.save()
    
    return Response({"details":"successful!"})
 
