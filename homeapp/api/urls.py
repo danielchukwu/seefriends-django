@@ -15,4 +15,7 @@ urlpatterns = [
    path('', views.getRoutes),
    path('posts/', views.getPosts),
    path('tells/', views.getTells),
+
+   path('posts/<str:pk>/', views.getPost),
+   path('tells/<str:pk>/', views.getTell),
 ]

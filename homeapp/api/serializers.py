@@ -60,10 +60,16 @@ class CommentTellSerializer(serializers.ModelSerializer):
 class TellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
    comments = serializers.SerializerMethodField()
+   date = serializers.SerializerMethodField()
+   
 
    class Meta:
       model = Tell
       fields = '__all__'
+
+   def get_date(self, obj):
+      date = obj.get_time
+      return date
 
    def get_comments(self, obj):
       comments = obj.commentontell_set.all()
