@@ -21,4 +21,7 @@ urlpatterns = [
 
    path('posts/<str:pk>/like/', views.likePost),
    path('tells/<str:pk>/like/', views.likeTell),
+
+   path('posts/<str:pk>/comment/', views.commentOnPost),
+   path('tells/<str:pk>/comment/', views.commentOnTell),
 ]

@@ -1,6 +1,7 @@
 from multiprocessing import context
 import random
-from homeapp.api.serializers import PostSerializer, TellSerializer, UserSerializer
+from homeapp.api import serializers
+from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, TellSerializer, UserSerializer
 from homeapp.forms import PostForm
 from homeapp.utils import returnInterestedFollowings, returnPostsForFeed
 
@@ -8,7 +9,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from homeapp.models import Activity, Post, Tell
+from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
 
 # create your api views here
 
@@ -150,3 +151,49 @@ def likeTell(request, pk):
          tell.likers.remove(user)
          tell.save()
       return Response({"details": "unlike successful!"})
+
+
+# Comments: Post and Tells
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def commentOnPost(request, pk):
+   post_object = Post.objects.get(id=pk)
+   post_object.commenters.add(request.user)
+   post_object.save()
+   if request.method == "POST":
+      user = request.user
+      add_comment = request.data["body"]
+      comment = CommentOnPost.objects.create(
+         owner = user,
+         post = post_object,
+         comment = add_comment
+      )
+      activity, created = Activity.objects.get_or_create(owner=post_object.owner, user=request.user, activity_type="comment_post", post=post_object, comment_post=comment)
+      if created:
+         post_object.owner.profile.activity_count += 1
+         post_object.owner.profile.save()
+   
+   serializer = CommentPostSerializer(comment, many=False)
+
+   return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def commentOnTell(request, pk):
+   tell_object = Tell.objects.get(id=pk)
+   if request.method == "POST":
+      user = request.user
+      add_comment = request.data["body"]
+      comment = CommentOnTell.objects.create(
+         owner = user,
+         tell = tell_object,
+         comment = add_comment
+      )
+      activity, created = Activity.objects.get_or_create(owner=tell_object.owner, user=request.user, activity_type="comment_tell", tell=tell_object, comment_tell=comment)
+      if created:
+         tell_object.owner.profile.activity_count += 1
+         tell_object.owner.profile.save()
+      
+   serializer = CommentTellSerializer(comment, many=False)
+
+   return Response(serializer.data)
