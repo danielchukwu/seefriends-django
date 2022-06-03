@@ -1,3 +1,4 @@
+from multiprocessing import context
 from users.models import UserFollower, UserFollowing
 from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
@@ -48,7 +49,7 @@ def getUser(request, pk):
 def getUserPost(request, pk):
    user = User.objects.get(id=pk)
    posts = user.post_set.all()
-   serializer = PostSerializer(posts, many=True)
+   serializer = PostSerializer(posts, many=True, context={'request': request})
    return Response(serializer.data)
 
 
@@ -58,7 +59,7 @@ def getUserTells(request, pk):
    user = User.objects.get(id=pk)
    tells = user.tell_set.all()
    print("tells:", tells)
-   serializer = TellSerializer(tells, many=True)
+   serializer = TellSerializer(tells, many=True, context={'request': request})
    return Response(serializer.data)
 
 
@@ -68,7 +69,7 @@ def getSavedPosts(request):
    if (request.method == "GET"):
       saved_post = request.user.profile.saved_post.all()
       print(saved_post)
-      serializer = PostSerializer(saved_post, many=True)
+      serializer = PostSerializer(saved_post, many=True, context={'request': request})
       # print("saved_post:", saved_post)
       return Response(serializer.data)
 
@@ -76,7 +77,7 @@ def getSavedPosts(request):
 @permission_classes([IsAuthenticated])
 def getSavedTells(request):
    saved_tell = request.user.profile.saved_tell.all()
-   serializer = TellSerializer(saved_tell, many=True)
+   serializer = TellSerializer(saved_tell, many=True, context={'request': request})
    # print("saved_tell:", saved_tell)
    return Response(serializer.data)
 

@@ -20,4 +20,5 @@ urlpatterns = [
    path('tells/<str:pk>/', views.getTell),
 
    path('posts/<str:pk>/like/', views.likePost),
+   path('tells/<str:pk>/like/', views.likeTell),
 ]

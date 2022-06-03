@@ -48,9 +48,6 @@ class PostSerializer(serializers.ModelSerializer):
       else:
          return False
 
-
-
-
    def get_comments(self, obj):
       comments = obj.commentonpost_set.all()
       serializers = CommentPostSerializer(comments, many=True)
@@ -72,13 +69,20 @@ class CommentTellSerializer(serializers.ModelSerializer):
 
 class TellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
    comments = serializers.SerializerMethodField()
    date = serializers.SerializerMethodField()
-   
 
    class Meta:
       model = Tell
       fields = '__all__'
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
 
    def get_date(self, obj):
       date = obj.get_time

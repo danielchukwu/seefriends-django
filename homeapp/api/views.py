@@ -1,3 +1,4 @@
+from multiprocessing import context
 import random
 from homeapp.api.serializers import PostSerializer, TellSerializer, UserSerializer
 from homeapp.forms import PostForm
@@ -71,15 +72,9 @@ def getPost(request, pk):
 @permission_classes([IsAuthenticated])
 def getTells(request):
    if (request.method == "GET"):
-      # tells = Tell.objects.all()
-      # serializer = TellSerializer(tells, many=True)
-      # return Response(serializer.data)
-
       tells = Tell.objects.all().order_by("-created")
-   
       user = request.user
       userfollows = user.profile.following.all()
-      # print(f"following: {userfollows}")
 
       for tell in user.tell_set.all()[:1]:
          if tell not in user.profile.seen_tell.all():
@@ -88,15 +83,12 @@ def getTells(request):
       # logic: iterate over people user follows to get thier current post and old post
       seen = user.profile.seen_tell.all()
       for user in userfollows:
-         # print(f"\nIteration: {user}")
          following_tell = Tell.objects.filter(owner = user)[:5]
-         # user_tell = request.user.tell_set.all()
          for tell in following_tell:
-            # print(f"feed tells: {tell}")
             if tell not in seen:
                request.user.profile.seen_tell.add(tell)
 
-      serializer = TellSerializer(tells, many=True)
+      serializer = TellSerializer(tells, many=True, context={'request': request})
       return Response(serializer.data)
       
    elif (request.method == "POST"):
@@ -110,13 +102,13 @@ def getTells(request):
 @permission_classes([IsAuthenticated])
 def getTell(request, pk):
    tell = Tell.objects.get(id=pk)
-   serializer = TellSerializer(tell, many=False)
+   serializer = TellSerializer(tell, many=False, context={'request': request})
    return Response(serializer.data)
 
 
 # LIKES
 # Handle post like and dislike
-@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def likePost(request, pk):
    post = Post.objects.get(id=pk)
@@ -132,9 +124,29 @@ def likePost(request, pk):
       user = request.user
       post = Post.objects.get(id=pk)
       participants = post.likers.all()
-      # print("Unlike\n", participants)
       if user in participants:
          post.likers.remove(user)
-         # print("Unlike\n", participants)
          post.save()
+      return Response({"details": "unlike successful!"})
+
+# Handle tell like and dislike
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def likeTell(request, pk):
+   tell = Tell.objects.get(id=pk)
+   participants = tell.likers.all()
+   if request.user not in participants:
+      tell.likers.add(request.user)
+      activity, created = Activity.objects.get_or_create(owner=tell.owner, user=request.user, activity_type="like_tell", tell=tell, liker_tell=request.user)
+      if created:
+         tell.owner.profile.activity_count = tell.owner.profile.activity_count + 1
+         tell.owner.profile.save()
+      return Response({"details": "like successful!"})
+   else:
+      user = request.user
+      tell = Tell.objects.get(id=pk)
+      participants = tell.likers.all()
+      if user in participants:
+         tell.likers.remove(user)
+         tell.save()
       return Response({"details": "unlike successful!"})
