@@ -18,4 +18,6 @@ urlpatterns = [
 
    path('posts/<str:pk>/', views.getPost),
    path('tells/<str:pk>/', views.getTell),
+
+   path('posts/<str:pk>/like/', views.likePost),
 ]

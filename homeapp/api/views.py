@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from homeapp.models import Post, Tell
+from homeapp.models import Activity, Post, Tell
 
 # create your api views here
 
@@ -46,7 +46,7 @@ def getPosts(request):
       # random.shuffle(seen)
       posts = unseen + seen
 
-      serializer = PostSerializer(posts, many=True)
+      serializer = PostSerializer(posts, many=True, context={'request': request}) # PASSING: CONTEXT TO OUR SERIALIZER
       return Response(serializer.data)
 
 
@@ -63,7 +63,7 @@ def getPosts(request):
 def getPost(request, pk):
    post = Post.objects.get(id=pk)
    print("Post:", post)
-   serializer = PostSerializer(post, many=False)
+   serializer = PostSerializer(post, many=False, context={'request': request})
    return Response(serializer.data)
 
 
@@ -112,3 +112,29 @@ def getTell(request, pk):
    tell = Tell.objects.get(id=pk)
    serializer = TellSerializer(tell, many=False)
    return Response(serializer.data)
+
+
+# LIKES
+# Handle post like and dislike
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def likePost(request, pk):
+   post = Post.objects.get(id=pk)
+   participants = post.likers.all()
+   if request.user not in participants:
+      post.likers.add(request.user)
+      activity, created = Activity.objects.get_or_create(owner=post.owner, user=request.user, activity_type="like_post", post=post, liker_post=request.user)
+      if created:
+         post.owner.profile.activity_count = post.owner.profile.activity_count + 1
+         post.owner.profile.save()
+      return Response({"details": "like successful!"})
+   else: 
+      user = request.user
+      post = Post.objects.get(id=pk)
+      participants = post.likers.all()
+      # print("Unlike\n", participants)
+      if user in participants:
+         post.likers.remove(user)
+         # print("Unlike\n", participants)
+         post.save()
+      return Response({"details": "unlike successful!"})

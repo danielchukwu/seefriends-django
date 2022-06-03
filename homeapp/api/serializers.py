@@ -1,3 +1,4 @@
+from urllib import request
 from rest_framework import serializers
 from homeapp.models import CommentOnPost, CommentOnTell, Post, Tell
 from users.models import Profile
@@ -31,12 +32,24 @@ class CommentPostSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
    comments = serializers.SerializerMethodField()
    date = serializers.SerializerMethodField()
+   # liked = serializers.SerializerMethodField()
 
    class Meta:
       model = Post
       fields = '__all__'
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
+
+
+
 
    def get_comments(self, obj):
       comments = obj.commentonpost_set.all()
