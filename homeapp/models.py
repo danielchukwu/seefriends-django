@@ -214,6 +214,8 @@ class Tell(models.Model):
    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
    body = models.TextField()
    likers = models.ManyToManyField(User, 'likers', blank=True)
+   
+   saved_count = models.PositiveSmallIntegerField(default=0)
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
