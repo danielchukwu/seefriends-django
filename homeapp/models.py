@@ -16,6 +16,7 @@ class Post(models.Model):
    body = models.TextField()
    likers = models.ManyToManyField(User, 'post_likers', blank=True)
    commenters = models.ManyToManyField(User, 'post_commenters', blank=True)
+   saved_count = models.PositiveSmallIntegerField(default=0)
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
