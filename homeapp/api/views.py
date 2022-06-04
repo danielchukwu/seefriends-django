@@ -197,3 +197,31 @@ def commentOnTell(request, pk):
    serializer = CommentTellSerializer(comment, many=False)
 
    return Response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def savePost(request, pk):
+   post = Post.objects.get(id=pk)
+   if post not in request.user.profile.saved_post.all():
+      request.user.profile.saved_post.add(post)
+      post.savers.add(request.user)
+   else: 
+      request.user.profile.saved_post.remove(post)
+      post.savers.add(request.user)
+   
+   return Response({"details": "successful!"})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def saveTell(request, pk):
+   tell = Tell.objects.get(id=pk)
+   if tell not in request.user.profile.saved_tell.all():
+      request.user.profile.saved_tell.add(tell)
+      tell.savers.add(request.user)
+   else: 
+      request.user.profile.saved_tell.remove(tell)
+      tell.savers.remove(request.user)
+   
+   return Response({"details": "successful!"})

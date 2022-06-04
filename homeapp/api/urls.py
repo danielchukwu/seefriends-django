@@ -24,4 +24,8 @@ urlpatterns = [
 
    path('posts/<str:pk>/comment/', views.commentOnPost),
    path('tells/<str:pk>/comment/', views.commentOnTell),
+
+   path('posts/<str:pk>/save-post/', views.savePost),
+   path('tells/<str:pk>/save-tell/', views.saveTell),
+   
 ]
