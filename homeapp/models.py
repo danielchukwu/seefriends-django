@@ -18,7 +18,7 @@ class Post(models.Model):
    commenters = models.ManyToManyField(User, 'post_commenters', blank=True)
    
    savers = models.ManyToManyField(User, 'post_savers', blank=True)
-   # saved_count = models.PositiveSmallIntegerField(default=0)
+   tellers = models.ManyToManyField(User, 'tellers_post', blank=True)
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
@@ -217,8 +217,12 @@ class Tell(models.Model):
    body = models.TextField()
    likers = models.ManyToManyField(User, 'likers', blank=True)
 
+   type = models.CharField(max_length=20, default="") # logic: This takes the type of tell. types: "tell", "post"
+   tell_on_post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True)
+   tell_on_tell = models.ForeignKey('Tell', related_name="tell_on_tell_now", on_delete=models.CASCADE, null=True, blank=True)
+
    savers = models.ManyToManyField(User, 'tell_savers', blank=True)
-   # saved_count = models.PositiveSmallIntegerField(default=0)
+   tellers = models.ManyToManyField(User, 'tellers_tell', blank=True)
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
