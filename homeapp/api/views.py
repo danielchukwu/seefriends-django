@@ -2,7 +2,7 @@ from django.db.models import Q
 from multiprocessing import context
 import random
 from homeapp.api import serializers
-from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, ProfileSerializer, TellSerializer, UserSerializer
+from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, ProfileSerializer, SearchSerializer, TellSerializer, UserSerializer
 from homeapp.forms import PostForm
 from homeapp.utils import returnInterestedFollowings, returnPostsForFeed
 
@@ -10,7 +10,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
+from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Search, Tell
 from users.models import Profile
 from django.contrib.auth.models import User
 
@@ -286,20 +286,33 @@ def discover(request):
    serializer = PostSerializer(post, many=True, context={"request": request})
    return Response(serializer.data)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def search(request):
-   searchs = Search.objects.filter(owner=request.user) 
+   if (request.method == "GET"):
+      searchs = Search.objects.filter(owner=request.user) 
 
-   search = request.data.get('body') if request.GET.get('body') != None else '   '
+      serializer = SearchSerializer(searchs, many= True)
+      return Response(serializer.data)
+   elif (request.method == "POST"):
+      print("IN SEARCH...................")
+      print(request.data)
+      print(request.data['body'])
+      # search = request.data['body'] if request.data['body'] != None else '   '
+      search = request.data['body']
 
-   users = User.objects.filter(
-      Q(username__icontains = search) |
-      Q(name__icontains = search)
-   )
+      users = User.objects.filter(
+         Q(username__startswith = search) |
+         Q(first_name__startswith = search) 
+      )
 
-   serializer = UserSerializer(users, many=True)
-   return Response(serializer.data)
+      # users = User.objects.filter(
+      #    Q(username__icontains = search) |
+      #    Q(first_name__icontains = search)
+      # )
+
+      serializer = UserSerializer(users, many=True)
+      return Response(serializer.data)
 
 @api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
@@ -309,11 +322,14 @@ def addSearchProfile(request, pk):
       if created: 
          print(f'Search Created: {search}')
       else: search.save()
+      return Response({"details": "successful!"})
    elif (request.method == "DELETE"): # DELETE pk: should be search id
       search = Search.objects.get(id=pk)
       search.delete()
+      new_searchs = request.user.search_set.all()
+      serializer = SearchSerializer(new_searchs, many= True)
 
-   return Response({'details': 'successful!'})
+      return Response(serializer.data)
 
 
 

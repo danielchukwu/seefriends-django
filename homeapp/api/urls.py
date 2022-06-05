@@ -34,7 +34,8 @@ urlpatterns = [
    path('discover/', views.discover),
 
    path('search/', views.search),
-   path('search/<str:pk>/', views.addSearchProfile),
+   path('search/<str:pk>/add/', views.addSearchProfile), # Add or Delete search endpoint
+   path('search/<str:pk>/delete/', views.addSearchProfile), # Add or Delete search endpoint
    
 
    

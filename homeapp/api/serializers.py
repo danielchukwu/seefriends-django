@@ -141,6 +141,7 @@ class TellSerializer(serializers.ModelSerializer):
 
 # Search Serializer
 class SearchSerializer(serializers.ModelSerializer):
+   user = UserSerializer()
    class Meta:
       model = Search
       fields = '__all__'
