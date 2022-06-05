@@ -273,5 +273,12 @@ def tellOnTell(request, pk):
    return Response(serializer.data)
 
 
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def discover(request):
+   post = sorted(Post.objects.all(), key=lambda x: random.random())[:22]
+   print(len(post))
+   # print(type(post))
+   serializer = PostSerializer(post, many=True, context={"request": request})
+   return Response(serializer.data)
 

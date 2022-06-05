@@ -70,11 +70,29 @@ class CommentTellSerializer(serializers.ModelSerializer):
 
 class TellOnTellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
+
    class Meta:
       model = Tell
       fields = '__all__'
+   
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
 class TellOnPostSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
+
    class Meta:
       model = Post
       fields = '__all__'

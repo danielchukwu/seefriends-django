@@ -31,4 +31,5 @@ urlpatterns = [
    path('posts/<str:pk>/tell-on-post/', views.tellOnPost),
    path('tells/<str:pk>/tell-on-tell/', views.tellOnTell),
    
+   path('discover/', views.discover),
 ]
