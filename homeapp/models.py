@@ -19,6 +19,7 @@ class Post(models.Model):
    
    savers = models.ManyToManyField(User, 'post_savers', blank=True)
    tellers = models.ManyToManyField(User, 'tellers_post', blank=True)
+   tellers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
@@ -222,7 +223,8 @@ class Tell(models.Model):
    tell_on_tell = models.ForeignKey('Tell', related_name="tell_on_tell_now", on_delete=models.CASCADE, null=True, blank=True)
 
    savers = models.ManyToManyField(User, 'tell_savers', blank=True)
-   tellers = models.ManyToManyField(User, 'tellers_tell', blank=True)
+   tellers = models.ManyToManyField(User, 'tellers_tell', blank=True)  # users that told
+   tellers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)

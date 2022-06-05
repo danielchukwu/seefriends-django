@@ -198,7 +198,7 @@ def commentOnTell(request, pk):
 
    return Response(serializer.data)
 
-
+# Post and Tell: Event actions: save, tell on, msg
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def savePost(request, pk):
@@ -225,3 +225,53 @@ def saveTell(request, pk):
       tell.savers.remove(request.user)
    
    return Response({"details": "successful!"})
+
+
+# tell On Post
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tellOnPost(request, pk):
+   print("Telling On Post")
+   post = Post.objects.get(id=pk)
+   print(post)
+
+   # tell creation
+   Tell.objects.create(
+         owner = request.user,
+         body = request.data['body'],
+         type = "post",
+         tell_on_post = post
+      )
+
+   # update the post that we are telling on
+   post.tellers.add(request.user)
+   post.tellers_count += 1
+   post.save()
+   
+   return Response({"details": "successful!"})
+
+# tell on Tell
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def tellOnTell(request, pk):
+   tell = Tell.objects.get(id=pk)
+   # tell creation
+   created_tell = Tell.objects.create(
+         owner = request.user,
+         body = request.data['body'],
+         type = "tell",
+         tell_on_tell = tell
+      )
+   
+   # update the tell that we are telling on
+   tell.tellers.add(request.user)
+   tell.tellers_count += 1
+   tell.save()
+
+   serializer = TellSerializer(created_tell, many=False, context={'request': request})
+   
+   return Response(serializer.data)
+
+
+
+

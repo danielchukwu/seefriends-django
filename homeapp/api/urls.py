@@ -27,5 +27,8 @@ urlpatterns = [
 
    path('posts/<str:pk>/save-post/', views.savePost),
    path('tells/<str:pk>/save-tell/', views.saveTell),
+
+   path('posts/<str:pk>/tell-on-post/', views.tellOnPost),
+   path('tells/<str:pk>/tell-on-tell/', views.tellOnTell),
    
 ]
