@@ -1,7 +1,8 @@
+from django.db.models import Q
 from multiprocessing import context
 import random
 from homeapp.api import serializers
-from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, TellSerializer, UserSerializer
+from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, ProfileSerializer, TellSerializer, UserSerializer
 from homeapp.forms import PostForm
 from homeapp.utils import returnInterestedFollowings, returnPostsForFeed
 
@@ -10,6 +11,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
+from users.models import Profile
+from django.contrib.auth.models import User
+
 
 # create your api views here
 
@@ -281,4 +285,37 @@ def discover(request):
    # print(type(post))
    serializer = PostSerializer(post, many=True, context={"request": request})
    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def search(request):
+   searchs = Search.objects.filter(owner=request.user) 
+
+   search = request.data.get('body') if request.GET.get('body') != None else '   '
+
+   users = User.objects.filter(
+      Q(username__icontains = search) |
+      Q(name__icontains = search)
+   )
+
+   serializer = UserSerializer(users, many=True)
+   return Response(serializer.data)
+
+@api_view(['GET', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def addSearchProfile(request, pk):
+   if (request.method == "GET"): # GET pk: should be user id
+      search, created = Search.objects.get_or_create(owner=request.user, user=User.objects.get(id=pk))
+      if created: 
+         print(f'Search Created: {search}')
+      else: search.save()
+   elif (request.method == "DELETE"): # DELETE pk: should be search id
+      search = Search.objects.get(id=pk)
+      search.delete()
+
+   return Response({'details': 'successful!'})
+
+
+
+
 

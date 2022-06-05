@@ -15,7 +15,7 @@ urlpatterns = [
    path('', views.getRoutes),
    path('posts/', views.getPosts),
    path('tells/', views.getTells),
-
+   
    path('posts/<str:pk>/', views.getPost),
    path('tells/<str:pk>/', views.getTell),
 
@@ -30,6 +30,12 @@ urlpatterns = [
 
    path('posts/<str:pk>/tell-on-post/', views.tellOnPost),
    path('tells/<str:pk>/tell-on-tell/', views.tellOnTell),
-   
+
    path('discover/', views.discover),
+
+   path('search/', views.search),
+   path('search/<str:pk>/', views.addSearchProfile),
+   
+
+   
 ]

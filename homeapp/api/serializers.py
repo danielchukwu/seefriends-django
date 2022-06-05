@@ -1,7 +1,7 @@
 from email.policy import default
 from urllib import request
 from rest_framework import serializers
-from homeapp.models import CommentOnPost, CommentOnTell, Post, Tell
+from homeapp.models import CommentOnPost, CommentOnTell, Post, Search, Tell
 from users.models import Profile
 from django.contrib.auth.models import User
 
@@ -137,3 +137,10 @@ class TellSerializer(serializers.ModelSerializer):
       comments = obj.commentontell_set.all()
       serializer = CommentTellSerializer(comments, many=True)
       return serializer.data
+
+
+# Search Serializer
+class SearchSerializer(serializers.ModelSerializer):
+   class Meta:
+      model = Search
+      fields = '__all__'
