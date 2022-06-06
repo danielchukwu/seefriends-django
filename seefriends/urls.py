@@ -28,6 +28,7 @@ urlpatterns = [
 
     path('api/', include('homeapp.api.urls')),
     path('api/users/', include('users.api.urls')),
+    path('api/messages/', include('messagesapp.api.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
