@@ -5,4 +5,5 @@ from . import views
 
 urlpatterns = [
    path('', views.messages),
+   path('<str:pk>/', views.messageChat), # "GET": Gets chat with a user and "POST": sends body to that chat
 ]

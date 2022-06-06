@@ -388,7 +388,7 @@ class Activity(models.Model):
 
    def __str__(self):
       return str(f"{self.owner} - {self.activity_type} activity from -> {self.user}")
-
+   
    def is_leapyear(self, year):
       # declared
       leap_year = None
@@ -406,28 +406,44 @@ class Activity(models.Model):
          leap_year = False
 
       return leap_year
-   def returnDateInMinutesAgo(self, year, month, day, hour, minutes):
+   def returnDaysAgo(self, year, month, day):
       is_a_leapyear = self.is_leapyear(year) # print(f"{year} is a leap year == {is_a_leapyear}")
       months_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
       months_days_leap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
+      days = 0
+
       days_for_months_ago = 0
       if is_a_leapyear == False: # print(f"Month: {month}")
-         for index, days in enumerate(months_days):
-            if index != month-1: # print(index+1, days)
-               days_for_months_ago += days
-            elif index == month-1: # print(f"stop month reached") #print(f"Total days: {days_for_months_ago + day}\n")
-               break
+         year_count = int(datetime.now().year - year) + 1
+         while(year_count > 0):
+            "use normal year months_days"
+            if year_count == 1:
+               "if this is current year? only add months days up on to our current month and stop"
+               current_month = datetime.now().month
+               days += sum(months_days[month-1 : current_month-1]) # -1 because the list index starts at 0
+               days += datetime.now().day # we ought to -days from this. because we add the month of msg creation with no regard to the days offset 
+               days -= day # let's just subtract the day of months post from total days
+               year_count -= 1
+            else:
+               "if this is not current year? add all the days together"
+               days += sum(months_days)
+               year_count -= 1
       else:
-         for index, days in enumerate(months_days_leap):
-            if index != month-1: # print(index+1, days)
-               days_for_months_ago += days
-            elif index == month-1: # print(f"stop month reached") #print(f"Total days: {days_for_months_ago + day}\n")
-               break
-      total_days = (days_for_months_ago + day)
-
-      total_minutes = minutes + (hour * 60) + ( (total_days * 24) * 60)
-      return total_minutes
+         # "use leap year months_days instead"
+         if year_count == 1:
+            "if this is current year? only add months days up on to our current month and stop"
+            current_month = datetime.now().month
+            days += sum(months_days[month-1 : current_month-1]) # -1 because the list index starts at 0
+            days += datetime.now().day # we ought to -days from this. because we add the month of msg creation with no regard to the days offset 
+            days -= day # let's just subtract the day of months post from total days
+            year_count -= 1
+         else:
+            "if this is not current year? add all the days together"
+            days += sum(months_days_leap)
+            year_count -= 1
+      
+      return days
 
    @property
    def get_time(self):
@@ -435,31 +451,22 @@ class Activity(models.Model):
       cr_date = self.created   # print(date) # print(cr_date)
 
       if date.year == cr_date.year:
-         minutes_ago = self.returnDateInMinutesAgo(date.year, date.month, date.day, date.hour, date.minute) - self.returnDateInMinutesAgo(date.year, cr_date.month, cr_date.day, cr_date.hour+1, cr_date.minute)
-         if date.day == cr_date.day:
-            print(minutes_ago)
-            if minutes_ago < 60:
-               return f"{minutes_ago} {'minutes' if minutes_ago != 1 else 'minute'} ago"
-            elif minutes_ago < 1440:
-               hour = minutes_ago // 60
-               return f"{hour} {'hours' if hour != 1 else 'hour'} ago"
-         elif date.month == cr_date.month and date.day-1 == cr_date.day:
-            return f"yesterday"
+         if date.month == cr_date.month:
+            if date.day == cr_date.day:
+               hour = cr_date.hour+1 if cr_date.hour+1 >= 10 else f"0{cr_date.hour+1}"  # e.g hrs=> 10:-- or 05:--
+               minutes = cr_date.minute if cr_date.minute >= 10 else f"0{cr_date.minute}" # e.g mins => --:34 or --:03
+               return f"{hour}:{minutes}"
+            else:
+               days = date.day - cr_date.day
+               if (days < 7):
+                  return f"{days}d"
+               else:
+                  weeks = days // 7
+                  return f"{weeks}w"
          else:
-            months = {
-            "1": "January",
-            "2": "February",
-            "3": "March",
-            "4": "April",
-            "5": "May",
-            "6": "June",
-            "7": "July",
-            "8": "August",
-            "9": "September",
-            "10": "October",
-            "11": "November",
-            "12": "December"
-            }
-
-            return f"{months[str(cr_date.month-1)][:3]} {cr_date.day}"
+            days = self.returnDaysAgo(cr_date.year, cr_date.month, cr_date.day)
+            return f"{days//7}w"
+      else:
+         days = self.returnDaysAgo(cr_date.year, cr_date.month, cr_date.day)
+         return f"{days//7}w"
 

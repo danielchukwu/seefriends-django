@@ -30,6 +30,87 @@ class Message(models.Model):
       ordering = ['-updated']            # logic: so it appears in chats in the order of most recently updated
       unique_together = ['owner', 'recipient']
 
+   def is_leapyear(self, year):
+      # declared
+      leap_year = None
+
+      # process: calculate if input is a leap year
+      if (year % 4 == 0):
+         if (year % 100 == 0):           
+            if (year % 400 == 0):
+               leap_year = True
+            else:
+               leap_year = False
+         else:
+            leap_year = True
+      else:
+         leap_year = False
+
+      return leap_year
+   def returnDaysAgo(self, year, month, day):
+      is_a_leapyear = self.is_leapyear(year) # print(f"{year} is a leap year == {is_a_leapyear}")
+      months_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+      months_days_leap = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+      days = 0
+
+      days_for_months_ago = 0
+      if is_a_leapyear == False: # print(f"Month: {month}")
+         year_count = int(datetime.now().year - year) + 1
+         while(year_count > 0):
+            "use normal year months_days"
+            if year_count == 1:
+               "if this is current year? only add months days up on to our current month and stop"
+               current_month = datetime.now().month
+               days += sum(months_days[month-1 : current_month-1]) # -1 because the list index starts at 0
+               days += datetime.now().day # we ought to -days from this. because we add the month of msg creation with no regard to the days offset 
+               days -= day # let's just subtract the day of months post from total days
+               year_count -= 1
+            else:
+               "if this is not current year? add all the days together"
+               days += sum(months_days)
+               year_count -= 1
+      else:
+         # "use leap year months_days instead"
+         if year_count == 1:
+            "if this is current year? only add months days up on to our current month and stop"
+            current_month = datetime.now().month
+            days += sum(months_days[month-1 : current_month-1]) # -1 because the list index starts at 0
+            days += datetime.now().day # we ought to -days from this. because we add the month of msg creation with no regard to the days offset 
+            days -= day # let's just subtract the day of months post from total days
+            year_count -= 1
+         else:
+            "if this is not current year? add all the days together"
+            days += sum(months_days_leap)
+            year_count -= 1
+      
+      return days
+
+   @property
+   def get_time(self):
+      date = datetime.now()
+      cr_date = self.subdate   # print(date) # print(cr_date)
+
+      if date.year == cr_date.year:
+         if date.month == cr_date.month:
+            if date.day == cr_date.day:
+               hour = cr_date.hour+1 if cr_date.hour+1 >= 10 else f"0{cr_date.hour+1}"  # e.g hrs=> 10:-- or 05:--
+               minutes = cr_date.minute if cr_date.minute >= 10 else f"0{cr_date.minute}" # e.g mins => --:34 or --:03
+               return f"{hour}:{minutes}"
+            else:
+               days = date.day - cr_date.day
+               if (days < 7):
+                  return f"{days}d"
+               else:
+                  weeks = days // 7
+                  return f"{weeks}w"
+         else:
+            days = self.returnDaysAgo(cr_date.year, cr_date.month, cr_date.day)
+            return f"{days//7}w"
+      else:
+         days = self.returnDaysAgo(cr_date.year, cr_date.month, cr_date.day)
+         return f"{days//7}w"
+
 
 
 class Body(models.Model):
