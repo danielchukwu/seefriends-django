@@ -1,7 +1,7 @@
 from multiprocessing import context
 from messagesapp.api.serializers import BodySerializer, MessageSerializer
 from messagesapp.models import Body, Message
-from messagesapp.utils import checkSettings, messegeSeenUtil, rejectEmptyMessageUtil, returnBody, returnMessages, returnMessagesCount, returnRequestsCount, sendRequest, updateSubDate
+from messagesapp.utils import acceptRequestUtil, checkSettings, messegeSeenUtil, rejectEmptyMessageUtil, returnBody, returnMessages, returnMessagesCount, returnRequestsCount, sendRequest, updateSubDate
 from users.models import UserFollower, UserFollowing
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
 
@@ -20,8 +20,8 @@ from users.api import serializers
 @permission_classes([IsAuthenticated])
 def messages(request):
    messages = returnMessages(request)
-   print("Messages............")
-   print(messages)
+   # print("Messages............")
+   # print(messages)
 
    messages_count = returnMessagesCount(request)     # logic: gets chats count
    requests_count = returnRequestsCount(request)   # logic: gets requests count
@@ -77,13 +77,16 @@ def messageChat(request, pk):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def requests(request):
+   print("1.................")
    messages = request.user.messages.filter(request_accepted = False)
+   print("2.................")
    serializer = MessageSerializer(messages, many=True)
+   print("3.................")
    return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def requestsMessage(request, pk):
+def requestsChat(request, pk):
    user = User.objects.get(id=pk)
    bodys = returnBody(user, request)
    # logic: mark messages as seen
@@ -92,5 +95,14 @@ def requestsMessage(request, pk):
    messegeSeenUtil(other_message)
    # if other_message.request_accepted == True and my_message.request_accepted == True:
    #    return redirect(message, pk)
-
    return Response([])
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def acceptRequest(request, pk):
+   user = User.objects.get(id=pk)
+   other_message, other_created = Message.objects.get_or_create(owner=user, recipient = request.user)
+   my_message, my_created = Message.objects.get_or_create(owner = request.user, recipient = other_message.owner)
+   acceptRequestUtil(other_message, my_message)
+
+   return Response({"details: successful!"})
