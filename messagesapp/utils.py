@@ -50,7 +50,7 @@ def returnBody(user, request):
    return bodys
 
 # SECTION 2: Counts
-def returnChatsCount(request):
+def returnMessagesCount(request):
    chats_count = request.user.messages.filter(
       Q (unread_messages__gt = 0) &
       Q (request_accepted = True)).count()
@@ -84,7 +84,7 @@ def rejectEmptyMessageUtil(message):
 
 
 # SECTION 4: Settings
-def returnChats(request):
+def returnMessages(request):
    "Check in with settings to know the order of the chats wanted"
    if request.user.settings.top_unread == True or request.user.settings.top_all == True:
       chats = request.user.messages.exclude(request_accepted = False)

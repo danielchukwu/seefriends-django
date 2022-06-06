@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 from homeapp.forms import PostForm
-from messagesapp.utils import returnChatsCount
+from messagesapp.utils import *
 from users.models import Profile
 
 # Create your views here.
@@ -47,7 +47,7 @@ def tellsPage(request):
             request.user.profile.seen_tell.add(tell)
 
    # logic: chats count to display chat count
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'tells': request.user.profile.seen_tell.all(), 'chats_count': chats_count}
    return render(request, 'tells.html', context)
@@ -94,7 +94,7 @@ def tellForm(request):
       return redirect(tellsPage)
    
    # logic: chats count to display chat count
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'chats_count': chats_count}
    return render(request, 'tell-form.html', context)
@@ -154,7 +154,7 @@ def home(request):
    random.shuffle(seen)
    contents = unseen + seen
 
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
    
    context = {'contents': contents, 'chats_count': chats_count}
    return render(request, 'home.html', context)
@@ -215,7 +215,7 @@ def createPost(request):
          return redirect(home)
    
    # logic: chats count to display chat count
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'user': user, 'chats_count': chats_count}
    return render(request, 'create-post.html', context)

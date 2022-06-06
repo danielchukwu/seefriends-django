@@ -4,5 +4,5 @@ from . import views
 # create your urls here
 
 urlpatterns = [
-   path('', views.fun),
+   path('', views.messages),
 ]

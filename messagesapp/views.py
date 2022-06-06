@@ -8,9 +8,9 @@ from .utils import *
 # Create your views here.
 
 def chat(request):
-   chats = returnChats(request)
+   chats = returnMessages(request)
 
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
    requests_count = returnRequestsCount(request)   # logic: gets requests count
 
    context = {'chats': chats, 'chats_count': chats_count, 'requests_count': requests_count}

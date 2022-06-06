@@ -1,6 +1,7 @@
 from multiprocessing import context
+from messagesapp.api.serializers import MessageSerializer
+from messagesapp.utils import returnMessages, returnMessagesCount, returnRequestsCount
 from users.models import UserFollower, UserFollowing
-from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
 
 from django.contrib.auth.models import User
@@ -16,5 +17,14 @@ from users.api import serializers
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def fun(request):
-   return Response([])
+def messages(request):
+   messages = returnMessages(request)
+   print("Messages............")
+   print(messages)
+
+   messages_count = returnMessagesCount(request)     # logic: gets chats count
+   requests_count = returnRequestsCount(request)   # logic: gets requests count
+
+   serializer = MessageSerializer(messages, many=True)
+
+   return Response(serializer.data)

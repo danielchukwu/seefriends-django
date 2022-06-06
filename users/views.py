@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
 
 from homeapp.views import home, tellsPage
-from messagesapp.utils import returnChatsCount
+from messagesapp.utils import *
 from .forms import CustomUserCreationForm, UpdateProfileForm
 
 # Create your views here.
@@ -20,7 +20,7 @@ def userProfile(request):
    page = "user-post"
    user = request.user
    contents = user.post_set.all()
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'user': user, 'contents': contents, 'chats_count': chats_count, 'page': page}
    return render(request, 'user-profile.html', context)
@@ -30,7 +30,7 @@ def userProfileTells(request):
    page = "user-tell"
    user = request.user
    contents = user.tell_set.all()
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'user': user, 'contents': contents, 'chats_count': chats_count, 'page': page}
    return render(request, 'user-profile.html', context)
@@ -41,7 +41,7 @@ def otherProfile(request, pk):
    user = User.objects.get(id=pk)
    if user == request.user: return redirect(userProfile)
    contents = user.post_set.all()
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'user': user, 'contents': contents, 'chats_count': chats_count, 'page': page}
    return render(request, 'user-profile.html', context)
@@ -51,7 +51,7 @@ def otherProfileTells(request, pk):
    user = User.objects.get(id=pk)
    if user == request.user: return redirect(userProfileTells)
    contents = user.tell_set.all()
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
 
    context = {'user': user, 'contents': contents, 'chats_count': chats_count, 'page': page}
    return render(request, 'user-profile.html', context)
@@ -322,7 +322,7 @@ def activityPage(request):
    profile.activity_count = 0
    profile.save()
    print(f"Activity Count: {profile.activity_count}")
-   chats_count = returnChatsCount(request)     # logic: gets chats count
+   chats_count = returnMessagesCount(request)     # logic: gets chats count
    
    context = {'chats_count': chats_count}
    return render(request, 'activity.html', context)
