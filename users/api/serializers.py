@@ -13,9 +13,14 @@ class MessageSerializer(serializers.ModelSerializer):
       fields = '__all__'
 class ProfileSerializer(serializers.ModelSerializer):
    msgcount = serializers.SerializerMethodField()
+   last_seen = serializers.SerializerMethodField()
+
    class Meta:
       model = Profile
       fields = '__all__'
+
+   def get_last_seen(self, obj):
+      return obj.get_last_seen
 
    def get_msgcount(self, obj):
       unread_msg = returnChatsCountApi(obj.user)

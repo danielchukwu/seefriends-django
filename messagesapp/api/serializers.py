@@ -9,10 +9,14 @@ from homeapp.api.serializers import *
 # create your message serializers over here
 
 class BodySerializer(serializers.ModelSerializer):
+   time = serializers.SerializerMethodField()
 
    class Meta:
       model = Body
       fields = '__all__'
+
+   def get_time(self, obj):
+      return obj.get_time
 
 class MessageSerializer(serializers.ModelSerializer):
    owner = UserSerializer()
