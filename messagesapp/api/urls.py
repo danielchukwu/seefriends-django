@@ -13,5 +13,6 @@ urlpatterns = [
    path('<str:pk>/remove/', views.exitRoom), # "GET": This goes to the room containing you and the other user and removes you from that room
    path('requests/<str:pk>/', views.requestsChat),
    
-   path('requests/<str:pk>/accept/', views.acceptRequest)
+   path('requests/<str:pk>/accept/', views.acceptRequest),
+   path('requests/<str:pk>/reject/', views.rejectRequest)
 ]

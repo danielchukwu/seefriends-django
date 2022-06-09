@@ -103,9 +103,22 @@ def requestsChat(request, pk):
 @permission_classes([IsAuthenticated])
 def acceptRequest(request, pk):
    user = User.objects.get(id=pk)
-   other_message, other_created = Message.objects.get_or_create(owner=user, recipient = request.user)
-   my_message, my_created = Message.objects.get_or_create(owner = request.user, recipient = other_message.owner)
+   
+   other_message= Message.objects.get(owner=user, recipient = request.user)
+   my_message = Message.objects.get(owner = request.user, recipient = other_message.owner)
    acceptRequestUtil(other_message, my_message)
+
+   return Response({"details: successful!"})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def rejectRequest(request, pk):
+   user = User.objects.get(id=pk)
+
+   other_message = Message.objects.get(owner=user, recipient = request.user)
+   my_message = Message.objects.get(owner = request.user, recipient = other_message.owner)
+   other_message.delete()
+   my_message.delete()
 
    return Response({"details: successful!"})
 
