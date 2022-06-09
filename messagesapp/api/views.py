@@ -1,6 +1,6 @@
 from multiprocessing import context
 from messagesapp.api.serializers import BodySerializer, MessageSerializer
-from messagesapp.models import Body, Message
+from messagesapp.models import Body, Message, Room
 from messagesapp.utils import acceptRequestUtil, checkSettings, messegeSeenUtil, rejectEmptyMessageUtil, returnBody, returnMessages, returnMessagesCount, returnRequestsCount, sendRequest, updateSubDate
 from users.models import UserFollower, UserFollowing
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
@@ -71,7 +71,9 @@ def messageChat(request, pk):
       other_message.save()
       updateSubDate(other_message)
 
-      return Response({"details": "successful"})
+      serializer = BodySerializer(body, many=False)
+
+      return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -106,3 +108,19 @@ def acceptRequest(request, pk):
    acceptRequestUtil(other_message, my_message)
 
    return Response({"details: successful!"})
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def exitRoom(request, pk):
+   me = request.user
+   if int(me.id) > int(pk):
+      room_name = f'{me.id}-{pk}'
+   else:
+      room_name = f'{pk}-{me.id}'
+
+   room= Room.objects.get(room_name = room_name)
+   room.participants.remove(me)
+   room.save()
+
+   return Response({"details": "successful!"})

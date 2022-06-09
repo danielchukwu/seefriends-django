@@ -1,7 +1,3 @@
-// javascript - This javascript handles our message page
-// Section 1: 
-// Scroll to the bottom of the page on load
-// window.scrollTo(0, document.body.clientHeight);
 window.scrollTo(0, document.body.scrollHeight);
 
 
@@ -12,6 +8,7 @@ let user_id = user.getAttribute('data-user')
 console.log('user:', user_id)
 
 let url = `ws://${window.location.host}/ws/message/${user_id}/`
+console.log(url)
 const messageSocket = new WebSocket(url)
 
 let get_time = function () {
