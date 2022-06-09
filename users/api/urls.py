@@ -5,6 +5,9 @@ from . import views
 
 urlpatterns = [
    path('', views.getOwner),
+
+   path('register/', views.registerUser),
+   
    path('activity/', views.getActivities),
    path('saved-posts/', views.getSavedPosts),
    path('saved-tells/', views.getSavedTells),
