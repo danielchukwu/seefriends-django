@@ -1,6 +1,7 @@
 from multiprocessing import context
 from users.forms import CustomUserCreationForm
 from users.models import Profile, UserFollower, UserFollowing
+from users.utils import checkRegistration
 from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
 
@@ -207,27 +208,18 @@ def registerUser(request):
    page = 'register'
    form = CustomUserCreationForm()
    print(request.data)
-   form_errors = []
 
-   username = request.data['username'][0]
-   email = request.data['email'][0]
-   password1 = request.data['password1'][0]
-   password2 = request.data['password2'][0]
-
+   username = request.data['username']
+   email = request.data['email']
+   password1 = request.data['password1']
+   password2 = request.data['password2']
 
    # sanity check
-   if User.objects.filter(username=username).count() > 0:
-      print("username already exists")
-   if User.objects.filter(email=email).count() > 0:
-      print("email already exists")
-   if password1 != password2:
-      print("passwords are not the same")
-   if password1 == username:
-      print("password is equel to username")
-   if len(password1) < 8:
-      print("password should b atleast 8 characters")
-
-   
+   # all errors = username, email, passwords unexact, password similar, password short
+   check = checkRegistration(username, email, password1, password2)
+   print("Invalidated:",check)
+   if (check):
+      return Response({'errors': check})
    
    if request.method == "POST":
       form = CustomUserCreationForm(request.data)
@@ -240,4 +232,6 @@ def registerUser(request):
 
          return Response({'details': 'successful!'})
       else:
-         return Response({'details': 'form not valid!'})
+         print(form.errors)
+         check.append('password easy')
+         return Response({'errors': check})
