@@ -6,6 +6,8 @@ from . import views
 urlpatterns = [
    path('', views.getOwner),
 
+   path('update/', views.updateProfile),
+
    path('register/', views.registerUser),
    
    path('activity/', views.getActivities),

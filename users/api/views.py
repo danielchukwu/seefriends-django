@@ -1,7 +1,7 @@
 from multiprocessing import context
-from users.forms import CustomUserCreationForm
+from users.forms import CustomUserCreationForm, UpdateProfileForm
 from users.models import Profile, UserFollower, UserFollowing
-from users.utils import checkRegistration
+from users.utils import checkRegistration, checkUpdate
 from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
 
@@ -215,7 +215,7 @@ def registerUser(request):
    password2 = request.data['password2']
 
    # sanity check
-   # all errors = username, email, passwords unexact, password similar, password short
+   # all errors = username, email, passwords unexact, password similar, password short, password easy 
    check = checkRegistration(username, email, password1, password2)
    print("Invalidated:",check)
    if (check):
@@ -235,3 +235,27 @@ def registerUser(request):
          print(form.errors)
          check.append('password easy')
          return Response({'errors': check})
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def updateProfile(request):
+   user = request.user
+   form = UpdateProfileForm(instance=user.profile)
+   if request.method == "POST":
+      username = request.data['username']
+      email = request.data['email']
+      password1 = "dan12345"
+      password2 = "dan12345"
+
+      check = checkUpdate(request, username, email)
+      print("Invalidated:",check)
+      if (check):
+         return Response({'errors': check})
+      
+      form = UpdateProfileForm(request.POST, request.FILES, instance=user.profile)
+      if form.is_valid():
+         profile = form.save()
+         return Response({'details': "successful!"})
+      else:
+         print(form.errors)
+         return Response({'details': "unsuccessful!"})
