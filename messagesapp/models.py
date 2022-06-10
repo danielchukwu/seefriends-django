@@ -7,6 +7,8 @@ from django.contrib.auth.models import User
 
 import uuid
 
+from homeapp.models import Post, Tell
+
 # Create your models here.
 
 class Message(models.Model):
@@ -120,6 +122,10 @@ class Body(models.Model):
    message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, blank=True)
    body = models.TextField()
    is_read = models.BooleanField(default=False)
+
+   msg_on_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="msg_post", null=True, blank=True)
+   msg_on_tell = models.ForeignKey(Tell, on_delete=models.CASCADE, related_name="msg_tell", null=True, blank=True)
+   type = models.CharField(max_length=20, default="") # "", "post", "tell"
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)

@@ -137,3 +137,44 @@ def exitRoom(request, pk):
    room.save()
 
    return Response({"details": "successful!"})
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def messagePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66], body="i love this post"
+   # "type: post, tell"
+   # "body: '-----' "
+   # "ids: [20, 32, 26] "
+   for i in request.data['ids']:
+      user = User.objects.get(id=i)
+      other_message, other_created = Message.objects.get_or_create(owner=user, recipient = request.user)
+      my_message, my_created = Message.objects.get_or_create(owner = request.user, recipient = other_message.owner)
+
+      update_chats_if_settings_says_top_all = checkSettings(request.user, other_message)
+
+      if request.method == "POST":
+      # logic: reject empty messages
+         reject = rejectEmptyMessageUtil(request.data['body'])
+         if reject: return Response([{"details": "can't send an empty body"}])
+
+         # logic: send request to user-> if friends = requests for both users true. else only one is made true
+         sendRequest(user, request.user, other_message, my_message)
+         
+         if request.data['type'] == "post":
+            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="post", msg_on_post=Post.objects.get(id=pk),)
+         elif request.data['type'] == "tell":
+            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="tell", msg_on_tell = Tell.objects.get(id=pk))
+
+         my_message.unread_messages += 1     # logic -> msg.3: increment unread message on my_message to -> recipient
+         my_message.save()
+
+         # logic -> msg.3: update both user message objects to the most recent created body in chat -> purpose: all just to display in chats the most recent text and time sent 😪
+         my_message.last_body = body
+         other_message.last_body = body
+         my_message.save()
+         updateSubDate(my_message)
+         other_message.save()
+         updateSubDate(other_message)
+
+         serializer = BodySerializer(body, many=False)
+   return Response({"details"})
