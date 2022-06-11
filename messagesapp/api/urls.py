@@ -12,6 +12,7 @@ urlpatterns = [
    path('<str:pk>/', views.messageChat), # "GET": Gets chat with a user and "POST": sends body to that chat
    path('<str:pk>/remove/', views.exitRoom), # "GET": This goes to the room containing you and the other user and removes you from that room
    path('requests/<str:pk>/', views.requestsChat),
+   path('<str:pk>/share/', views.sharePostTell),
    
    path('requests/<str:pk>/accept/', views.acceptRequest),
    path('requests/<str:pk>/reject/', views.rejectRequest)

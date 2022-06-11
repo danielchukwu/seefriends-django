@@ -221,7 +221,7 @@ class Search(models.Model):
 # tell
 class Tell(models.Model):
    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-   body = models.TextField()
+   body = models.TextField(default="")
    likers = models.ManyToManyField(User, 'likers', blank=True)
 
    type = models.CharField(max_length=20, default="") # logic: This takes the type of tell. types: "tell", "post"

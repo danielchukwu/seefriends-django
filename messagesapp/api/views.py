@@ -145,8 +145,14 @@ def sharePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66], 
    # "type: post, tell"
    # "body: '-----' "
    # "ids: [20, 32, 26] "
-   for i in request.data['ids']:
-      user = User.objects.get(id=i)
+   print("SHARE POST TELL ....................")
+   ids = request.data['ids'].split(',')
+   print(ids)
+   print(request.data['type'])
+   print(request.data['body'])
+   for index, i in enumerate(ids):
+      print("Iteration:", index)
+      user = User.objects.get(id=int(i))
       other_message, other_created = Message.objects.get_or_create(owner=user, recipient = request.user)
       my_message, my_created = Message.objects.get_or_create(owner = request.user, recipient = other_message.owner)
 
