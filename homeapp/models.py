@@ -17,9 +17,15 @@ class Post(models.Model):
    likers = models.ManyToManyField(User, 'post_likers', blank=True)
    commenters = models.ManyToManyField(User, 'post_commenters', blank=True)
    
+   # post savers
    savers = models.ManyToManyField(User, 'post_savers', blank=True)
+   # tellers
    tellers = models.ManyToManyField(User, 'tellers_post', blank=True)
    tellers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
+   # message on
+   sharers = models.ManyToManyField(User, 'sharers_post', blank=True)
+   sharers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
+
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)
@@ -224,7 +230,11 @@ class Tell(models.Model):
 
    savers = models.ManyToManyField(User, 'tell_savers', blank=True)
    tellers = models.ManyToManyField(User, 'tellers_tell', blank=True)  # users that told
-   tellers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
+   tellers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of just counting amount of tellers since 1 user can tell multiple times
+   # message on
+   sharers = models.ManyToManyField(User, 'sharers_tell', blank=True)
+   sharers_count = models.PositiveSmallIntegerField(default=0) # this will keep the count of tells. instead of using tellers.length
+
 
    updated = models.DateTimeField(auto_now=True)
    created = models.DateTimeField(auto_now_add=True)

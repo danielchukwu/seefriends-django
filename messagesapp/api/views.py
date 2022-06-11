@@ -161,9 +161,17 @@ def messagePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66]
          sendRequest(user, request.user, other_message, my_message)
          
          if request.data['type'] == "post":
-            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="post", msg_on_post=Post.objects.get(id=pk),)
+            post = Post.objects.get(id=pk)
+            post.sharers.add(request.user)    # user shared
+            post.sharers_count(request.user)   # increment shares count
+            post.save()
+            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="post", msg_on_post=post,)
          elif request.data['type'] == "tell":
-            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="tell", msg_on_tell = Tell.objects.get(id=pk))
+            tell = Tell.objects.get(id=pk)
+            tell.sharers.add(request.user)    # user shared
+            tell.sharers_count(request.user)   # increment shares count
+            tell.save()
+            body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="tell", msg_on_tell = tell)
 
          my_message.unread_messages += 1     # logic -> msg.3: increment unread message on my_message to -> recipient
          my_message.save()
