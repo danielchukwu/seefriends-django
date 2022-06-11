@@ -141,7 +141,7 @@ def exitRoom(request, pk):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def messagePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66], body="i love this post"
+def sharePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66], body="i love this post"
    # "type: post, tell"
    # "body: '-----' "
    # "ids: [20, 32, 26] "
