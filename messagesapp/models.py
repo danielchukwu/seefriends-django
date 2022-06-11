@@ -120,7 +120,7 @@ class Body(models.Model):
    recipient = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="body_recipient", null=True, blank=True)
 
    message = models.ForeignKey(Message, on_delete=models.CASCADE, null=True, blank=True)
-   body = models.TextField()
+   body = models.TextField(default="")
    is_read = models.BooleanField(default=False)
 
    msg_on_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="msg_post", null=True, blank=True)
