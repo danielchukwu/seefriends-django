@@ -333,21 +333,3 @@ def addSearchProfile(request, pk):
 
       return Response(serializer.data)
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getPostThreads(request, pk):
-   post = Post.objects.get(id=pk)
-   tells = post.tell_on_post.all()
-   serializer = TellSerializer(many=True)
-   # return Response({"details": "successful!"})
-   return Response(serializer.data)
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def getTellThreads(request, pk):
-   tell = Tell.objects.get(id=pk)
-   tells = tell.tell_on_tell.all()
-   serializer = TellSerializer(many=True)
-   # return Response({"details": "successful!"})
-   return Response(serializer.data)
-

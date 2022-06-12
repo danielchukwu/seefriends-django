@@ -22,9 +22,6 @@ urlpatterns = [
    path('posts/<str:pk>/like/', views.likePost),
    path('tells/<str:pk>/like/', views.likeTell),
 
-   # path('posts/<str:pk>/threads/', views.getPostThreads),
-   # path('tells/<str:pk>/threads/', views.getTellThreads),
-
    path('posts/<str:pk>/comment/', views.commentOnPost),
    path('tells/<str:pk>/comment/', views.commentOnTell),
 
