@@ -24,42 +24,13 @@ class UserSerializer(serializers.ModelSerializer):
       return serializer.data
 
 
+# Comment Serializers
 class CommentPostSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
 
    class Meta:
       model = CommentOnPost
       fields = '__all__'
-
-class PostSerializer(serializers.ModelSerializer):
-   owner = UserSerializer(many=False)
-   liked = serializers.SerializerMethodField("_liked")
-   comments = serializers.SerializerMethodField()
-   date = serializers.SerializerMethodField()
-   # liked = serializers.SerializerMethodField()
-
-   class Meta:
-      model = Post
-      fields = '__all__'
-
-   def _liked(self, obj):
-      user = self.context["request"].user # RECIEVING CONTEXT
-      if user in obj.likers.all():
-         return True
-      else:
-         return False
-
-   def get_comments(self, obj):
-      comments = obj.commentonpost_set.all()
-      serializers = CommentPostSerializer(comments, many=True)
-      return serializers.data
-
-   def get_date(self, obj):
-      date = obj.get_date
-      return date
-
-
-
 class CommentTellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
 
@@ -67,7 +38,7 @@ class CommentTellSerializer(serializers.ModelSerializer):
       model = CommentOnTell
       fields = '__all__'
 
-
+# Tell on Serializers
 class TellOnTellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
    liked = serializers.SerializerMethodField("_liked")
@@ -96,6 +67,33 @@ class TellOnPostSerializer(serializers.ModelSerializer):
    class Meta:
       model = Post
       fields = '__all__'
+
+# Post and Tell Serializers
+class PostSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
+   comments = serializers.SerializerMethodField()
+   date = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Post
+      fields = '__all__'
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
+
+   def get_comments(self, obj):
+      comments = obj.commentonpost_set.all()
+      serializers = CommentPostSerializer(comments, many=True)
+      return serializers.data
+
+   def get_date(self, obj):
+      date = obj.get_date
+      return date
 class TellSerializer(serializers.ModelSerializer):
    owner = UserSerializer(many=False)
    tell_on_post = TellOnPostSerializer(many=False)
@@ -121,21 +119,76 @@ class TellSerializer(serializers.ModelSerializer):
       return date
 
    def get_comments(self, obj):
-      # Grab comments for Post if it's a tell on post Tell
-      # Grab comments for Tell if it's a tell on tell Tell
-      # Grab comments for the main tell. default
-      # match (obj.type):
-      #    case "post":
-      #       comments = obj.tell_on_post.commentonpost_set.all()
-      #       serializer = CommentPostSerializer(comments, many=True)
-      #    case "tell":
-      #       comments = obj.tell_on_tell.commentontell_set.all()
-      #       serializer = CommentTellSerializer(comments, many=True)
-      #    case default:
-      #       comments = obj.commentontell_set.all()
-      #       serializer = CommentTellSerializer(comments, many=True)
       comments = obj.commentontell_set.all()
       serializer = CommentTellSerializer(comments, many=True)
+      return serializer.data
+
+# Post an Tell Single Serializers
+class PostSingleSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+   liked = serializers.SerializerMethodField("_liked")
+   comments = serializers.SerializerMethodField()
+   date = serializers.SerializerMethodField()
+   threads = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Post
+      fields = '__all__'
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
+
+   def get_comments(self, obj):
+      comments = obj.commentonpost_set.all()
+      serializers = CommentPostSerializer(comments, many=True)
+      return serializers.data
+
+   def get_date(self, obj):
+      date = obj.get_date
+      return date
+
+   def get_threads(self, obj):
+      tells = obj.tell_set.all()
+      serializer = TellSerializer(tells, many=True, context={'request': self.context["request"]})
+      return serializer.data
+
+class TellSingleSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+   tell_on_post = TellOnPostSerializer(many=False)
+   tell_on_tell = TellOnTellSerializer(many=False)  
+   
+   liked = serializers.SerializerMethodField("_liked")
+   comments = serializers.SerializerMethodField()
+   date = serializers.SerializerMethodField()
+   threads = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Tell
+      fields = '__all__'
+
+   def _liked(self, obj):
+      user = self.context["request"].user # RECIEVING CONTEXT
+      if user in obj.likers.all():
+         return True
+      else:
+         return False
+
+   def get_date(self, obj):
+      date = obj.get_time
+      return date
+
+   def get_comments(self, obj):
+      comments = obj.commentontell_set.all()
+      serializer = CommentTellSerializer(comments, many=True)
+      return serializer.data
+
+   def get_threads(self, obj):
+      tells = obj.tell_on_tell_now.all()
+      serializer = TellSerializer(tells, many=True, context={'request': self.context["request"]})
       return serializer.data
 
 
@@ -145,3 +198,4 @@ class SearchSerializer(serializers.ModelSerializer):
    class Meta:
       model = Search
       fields = '__all__'
+

@@ -2,7 +2,7 @@ from django.db.models import Q
 from multiprocessing import context
 import random
 from homeapp.api import serializers
-from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, ProfileSerializer, SearchSerializer, TellSerializer, UserSerializer
+from homeapp.api.serializers import CommentPostSerializer, CommentTellSerializer, PostSerializer, PostSingleSerializer, ProfileSerializer, SearchSerializer, TellSerializer, TellSingleSerializer, UserSerializer
 from homeapp.forms import PostForm
 from homeapp.utils import returnInterestedFollowings, returnPostsForFeed
 
@@ -69,7 +69,7 @@ def getPosts(request):
 def getPost(request, pk):
    post = Post.objects.get(id=pk)
    print("Post:", post)
-   serializer = PostSerializer(post, many=False, context={'request': request})
+   serializer = PostSingleSerializer(post, many=False, context={'request': request})
    return Response(serializer.data)
 
 
@@ -107,7 +107,7 @@ def getTells(request):
 @permission_classes([IsAuthenticated])
 def getTell(request, pk):
    tell = Tell.objects.get(id=pk)
-   serializer = TellSerializer(tell, many=False, context={'request': request})
+   serializer = TellSingleSerializer(tell, many=False, context={'request': request})
    return Response(serializer.data)
 
 
@@ -317,6 +317,8 @@ def search(request):
 @api_view(['GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def addSearchProfile(request, pk):
+
+
    if (request.method == "GET"): # GET pk: should be user id
       search, created = Search.objects.get_or_create(owner=request.user, user=User.objects.get(id=pk))
       if created: 
@@ -331,7 +333,21 @@ def addSearchProfile(request, pk):
 
       return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getPostThreads(request, pk):
+   post = Post.objects.get(id=pk)
+   tells = post.tell_on_post.all()
+   serializer = TellSerializer(many=True)
+   # return Response({"details": "successful!"})
+   return Response(serializer.data)
 
-
-
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getTellThreads(request, pk):
+   tell = Tell.objects.get(id=pk)
+   tells = tell.tell_on_tell.all()
+   serializer = TellSerializer(many=True)
+   # return Response({"details": "successful!"})
+   return Response(serializer.data)
 
