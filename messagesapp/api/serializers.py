@@ -8,8 +8,24 @@ from homeapp.api.serializers import *
 
 # create your message serializers over here
 
+class PostSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+
+   class Meta:
+      model = Post
+      fields = '__all__'
+
+class TellSerializer(serializers.ModelSerializer):
+   owner = UserSerializer(many=False)
+   class Meta:
+      model = Tell
+      fields = '__all__'
+
 class BodySerializer(serializers.ModelSerializer):
    time = serializers.SerializerMethodField()
+
+   msg_on_post = PostSerializer(many=False)
+   msg_on_tell = TellSerializer(many=False)
 
    class Meta:
       model = Body

@@ -155,30 +155,34 @@ def sharePostTell(request, pk): # Receives: type=post, id's = [23, 43, 55, 66], 
       user = User.objects.get(id=int(i))
       other_message, other_created = Message.objects.get_or_create(owner=user, recipient = request.user)
       my_message, my_created = Message.objects.get_or_create(owner = request.user, recipient = other_message.owner)
-
+      print("1. other_message and my_message worked!")
       update_chats_if_settings_says_top_all = checkSettings(request.user, other_message)
 
       if request.method == "POST":
       # logic: reject empty messages
-         reject = rejectEmptyMessageUtil(request.data['body'])
-         if reject: return Response([{"details": "can't send an empty body"}])
+         print("2. In Post")
+         # reject = rejectEmptyMessageUtil(request.data['body'])
+         # if reject: return Response([{"details": "can't send an empty body"}])
 
          # logic: send request to user-> if friends = requests for both users true. else only one is made true
          sendRequest(user, request.user, other_message, my_message)
+         print("3. Request Sent")
          
          if request.data['type'] == "post":
+            print("4. type: post")
             post = Post.objects.get(id=pk)
             post.sharers.add(request.user)    # user shared
-            post.sharers_count(request.user)   # increment shares count
+            post.sharers_count += 1   # increment shares count
             post.save()
             body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="post", msg_on_post=post,)
+            print("5. body created")
          elif request.data['type'] == "tell":
+            print("4. type: tell")
             tell = Tell.objects.get(id=pk)
             tell.sharers.add(request.user)    # user shared
-            tell.sharers_count(request.user)   # increment shares count
+            tell.sharers_count += 1   # increment shares count
             tell.save()
             body = Body.objects.create(owner=request.user, recipient=other_message.owner, message=my_message, body=request.data['body'], type="tell", msg_on_tell = tell)
-
          my_message.unread_messages += 1     # logic -> msg.3: increment unread message on my_message to -> recipient
          my_message.save()
 
