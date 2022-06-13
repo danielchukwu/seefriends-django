@@ -68,7 +68,7 @@ def getPosts(request):
 @permission_classes([IsAuthenticated])
 def getPost(request, pk):
    post = Post.objects.get(id=pk)
-   print("Post:", post)
+   # print("Post:", post)
    serializer = PostSingleSerializer(post, many=False, context={'request': request})
    return Response(serializer.data)
 
@@ -235,9 +235,9 @@ def saveTell(request, pk):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def tellOnPost(request, pk):
-   print("Telling On Post")
+   # print("Telling On Post")
    post = Post.objects.get(id=pk)
-   print(post)
+   # print(post)
 
    # tell creation
    Tell.objects.create(
@@ -281,7 +281,7 @@ def tellOnTell(request, pk):
 @permission_classes([IsAuthenticated])
 def discover(request):
    post = sorted(Post.objects.all(), key=lambda x: random.random())[:22]
-   print(len(post))
+   # print(len(post))
    # print(type(post))
    serializer = PostSerializer(post, many=True, context={"request": request})
    return Response(serializer.data)
@@ -322,7 +322,8 @@ def addSearchProfile(request, pk):
    if (request.method == "GET"): # GET pk: should be user id
       search, created = Search.objects.get_or_create(owner=request.user, user=User.objects.get(id=pk))
       if created: 
-         print(f'Search Created: {search}')
+         # print(f'Search Created: {search}')
+         pass
       else: search.save()
       return Response({"details": "successful!"})
    elif (request.method == "DELETE"): # DELETE pk: should be search id

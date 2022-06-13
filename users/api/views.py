@@ -70,7 +70,7 @@ def getUserTells(request, pk):
 def getSavedPosts(request):
    if (request.method == "GET"):
       saved_post = request.user.profile.saved_post.all()
-      print(saved_post)
+      # print(saved_post)
       serializer = PostSerializer(saved_post, many=True, context={'request': request})
       # print("saved_post:", saved_post)
       return Response(serializer.data)
