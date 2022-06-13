@@ -1,3 +1,5 @@
+from dataclasses import field
+from operator import mod
 from homeapp.models import Activity, CommentOnPost, CommentOnTell, Post, Tell
 from messagesapp.models import Message
 from messagesapp.utils import returnChatsCountApi
@@ -26,6 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
       unread_msg = returnChatsCountApi(obj.user)
       print(f"unread_messages: {unread_msg}")
       return unread_msg
+
 
 class UserSerializer(serializers.ModelSerializer):
    profile = serializers.SerializerMethodField()
@@ -194,4 +197,22 @@ class TellSerializer(serializers.ModelSerializer):
       comments = obj.commentontell_set.all()
       # print(f"Comments: {comments}")
       serializer = CommentTellSerializer(comments, many=True)
+      return serializer.data
+
+class Post2Serializer(serializers.ModelSerializer):
+   class Meta:
+      model = Post
+      fields = "__all__"
+
+class ProfileWithPostSerializer(serializers.ModelSerializer):
+   posts = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Profile
+      fields = '__all__'
+
+   def get_posts(self, obj):
+      posts = obj.user.post_set.all()[:3]
+      # print("POSTSSS: ", posts)
+      serializer = Post2Serializer(posts, many=True)
       return serializer.data

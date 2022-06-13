@@ -57,7 +57,6 @@ def otherProfileTells(request, pk):
    return render(request, 'user-profile.html', context)
 
 
-
 # SECTION 2: FOLLOW & UNFOLLOW -> algorithm
 @login_required(login_url="login")
 def follow(request, pk):
@@ -321,7 +320,7 @@ def activityPage(request):
    profile = request.user.profile
    profile.activity_count = 0
    profile.save()
-   print(f"Activity Count: {profile.activity_count}")
+   # print(f"Activity Count: {profile.activity_count}")
    chats_count = returnMessagesCount(request)     # logic: gets chats count
    
    context = {'chats_count': chats_count}

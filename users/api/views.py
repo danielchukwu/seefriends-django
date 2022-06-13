@@ -1,9 +1,11 @@
 from multiprocessing import context
+from random import shuffle
 from users.forms import CustomUserCreationForm, UpdateProfileForm
 from users.models import Profile, UserFollower, UserFollowing
 from users.utils import checkRegistration, checkUpdate
-from .serializers import ActivitySerializer, PostSerializer, TellSerializer, UserSerializer
+from .serializers import ActivitySerializer, PostSerializer, ProfileSerializer, ProfileWithPostSerializer, TellSerializer, UserSerializer
 from homeapp.models import Activity, Post, PostFeed, Tell, SavePost, SaveTell
+from django.db.models import Q
 
 from django.contrib.auth.models import User
 
@@ -22,6 +24,17 @@ from users.api import serializers
 def getOwner(request):
    user = request.user
    serializer= UserSerializer(user, many=False)
+   return Response(serializer.data)
+
+# Fetch verified profiles
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getProfiles(request):
+   profiles = Profile.objects.filter(
+      Q(verified = True)
+   )
+   # shuffle(profiles)
+   serializer = ProfileWithPostSerializer(profiles, many=True)
    return Response(serializer.data)
 
 # Activity

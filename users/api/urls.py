@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
    path('', views.getOwner),
+   path('profiles/', views.getProfiles),
 
    path('update/', views.updateProfile),
 
