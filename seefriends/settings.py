@@ -150,11 +150,22 @@ SIMPLE_JWT = {
 # }
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'seefriends_datatbase',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'seefriends_2', 
+        'USER': 'postgres', 
+        'PASSWORD': 'Danielcarl4u_',
+        'HOST': 'localhost', 
+        'PORT': '5432',
+    }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'djongo',
+#         'NAME': 'seefriends_datatbase',
+#     }
+# }
 
 
 
