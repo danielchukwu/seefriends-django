@@ -6,6 +6,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 import homeapp
 
+# class UProfile(models.Model):
+#    user = models.OneToOneField(User, on_delete=models.CASCADE)
+#    name = models.CharField(max_length=200, blank=True, null=True)
+#    username = models.CharField(max_length=200, blank=True, null=True, unique=True)
+#    email = models.EmailField(max_length=500, blank=True, null=True, unique=True)
+#    img = models.ImageField(upload_to="profiles/", default="icons/user.png")
+#    bio = models.TextField(default="", blank=True, null=True)
+
+#    updated = models.DateTimeField(auto_now_add=True)
+#    created = models.DateTimeField(auto_now=True)
+#    id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
 class Profile(models.Model):
    VOTE_TYPE = (
