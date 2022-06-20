@@ -27,7 +27,9 @@ SECRET_KEY = 'django-insecure-$s628lp9*o=8l_8_xhsv-+z6g&82#yjc-6nsjcs&gak0c@808(
 # DEBUG = True
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'seefriends.herokuapp.com', # future
+]
 
 
 # Application definition
@@ -212,7 +214,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    '.herokuapp.com',
     'seefriends.herokuapp.com', # future
     'http://seefriends.netlify.app', # future
 ]
