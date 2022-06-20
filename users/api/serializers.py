@@ -42,41 +42,6 @@ class UserSerializer(serializers.ModelSerializer):
       return serializer.data
 
 
-class ActivitySerializer(serializers.ModelSerializer):
-   profile = serializers.SerializerMethodField()
-   postimg = serializers.SerializerMethodField()
-   comment = serializers.SerializerMethodField()
-   date = serializers.SerializerMethodField()
-
-   class Meta:
-      model = Activity
-      fields = '__all__'
-
-   def get_profile(self, obj):
-      profile = obj.user.profile
-      serializer = ProfileSerializer(profile, many=False)
-      return serializer.data
-
-   def get_date(self, obj):
-      return str(obj.get_time)
-
-   # like_post, like_tell, comment_post, comment_tell, follow
-   def get_postimg(self, obj):
-      if obj.activity_type == "like_post" or obj.activity_type == "comment_post":
-         img = obj.post.img
-         return str(img)
-      else: return ""
-
-
-   def get_comment(self, obj):
-      if obj.activity_type == "comment_post":
-         comment = obj.comment_post.comment
-         # print('COMMENT: ', comment)
-         return str(comment)
-      elif obj.activity_type == "comment_tell":
-         comment = obj.comment_tell.comment
-         # print('COMMENT: ', comment)
-         return str(comment)
 
 
 
@@ -216,3 +181,40 @@ class ProfileWithPostSerializer(serializers.ModelSerializer):
       # print("POSTSSS: ", posts)
       serializer = Post2Serializer(posts, many=True)
       return serializer.data
+
+
+class ActivitySerializer(serializers.ModelSerializer):
+   profile = serializers.SerializerMethodField()
+   post = Post2Serializer(many=False)
+   comment = serializers.SerializerMethodField()
+   date = serializers.SerializerMethodField()
+
+   class Meta:
+      model = Activity
+      fields = '__all__'
+
+   def get_profile(self, obj):
+      profile = obj.user.profile
+      serializer = ProfileSerializer(profile, many=False)
+      return serializer.data
+
+   def get_date(self, obj):
+      return str(obj.get_time)
+
+   # like_post, like_tell, comment_post, comment_tell, follow
+   # def get_post(self, obj):
+   #    if obj.activity_type == "like_post" or obj.activity_type == "comment_post":
+   #       serializer = Post2Serializer(obj.post, many=False)
+   #       return serializer.data
+   #    else: return ""
+
+
+   def get_comment(self, obj):
+      if obj.activity_type == "comment_post":
+         comment = obj.comment_post.comment
+         # print('COMMENT: ', comment)
+         return str(comment)
+      elif obj.activity_type == "comment_tell":
+         comment = obj.comment_tell.comment
+         # print('COMMENT: ', comment)
+         return str(comment)
