@@ -24,10 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$s628lp9*o=8l_8_xhsv-+z6g&82#yjc-6nsjcs&gak0c@808('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = False
+DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = [
+    '127.0.0.1',
     'seefriends.herokuapp.com', # future
 ]
 
@@ -214,10 +215,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'seefriends.netlify.app',
-    'https://seefriends.netlify.app/',
-    # 'http://seefriends.netlify.app',
-    # 'http://seefriends.netlify.app', # future
+    'https://seefriends.netlify.app',
 ]
 
 
