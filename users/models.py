@@ -15,7 +15,8 @@ class Profile(models.Model):
    name = models.CharField(max_length=200, blank=True, null=True)
    username = models.CharField(max_length=200, blank=True, null=True, unique=True)
    email = models.EmailField(max_length=500, blank=True, null=True, unique=True)
-   img = models.ImageField(upload_to="profiles/", default="icons/user.png")
+   # img = models.ImageField(upload_to="profiles/", default="icons/user.png")
+   img = models.ImageField(upload_to="profiles/", default="default/images/user.png")
    # gender = models.CharField(max_length=200, choices=VOTE_TYPE)
    bio = models.TextField(default="", blank=True, null=True)
 
