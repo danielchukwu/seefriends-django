@@ -25,7 +25,7 @@ def checkRegistration(username, email, password1, password2):
 def checkUpdate(request, username, email):
    form_errors = []
 
-   if request.user.uprofile.username == username:
+   if request.user.profile.username == username:
       # "no error since it's your username"
       pass
    elif User.objects.filter(username__exact=username).count() > 0:
@@ -33,7 +33,7 @@ def checkUpdate(request, username, email):
       form_errors.append('username')
 
 
-   if request.user.uprofile.email == email:
+   if request.user.profile.email == email:
       # "no error since it's your email"
       pass
    elif User.objects.filter(email__exact=email).count() > 0:

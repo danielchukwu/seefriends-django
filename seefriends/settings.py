@@ -47,7 +47,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'storages',
 ]
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -141,21 +143,23 @@ SIMPLE_JWT = {
 #     }
 # }
 
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'seefriends_datatbase',
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'seefriends_2', 
+#         'USER': 'postgres', 
+#         'PASSWORD': 'Danielcarl4u_',
+#         'HOST': 'localhost', 
+#         'PORT': '5432',
 #     }
 # }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'seefriends_2', 
-        'USER': 'postgres', 
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'seefriends', 
+        'USER': 'danielchukwu', 
         'PASSWORD': 'Danielcarl4u_',
-        'HOST': 'localhost', 
+        'HOST': 'seefriendsdb-1.crox0djaqnnr.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }
@@ -223,3 +227,9 @@ MEDIA_ROOT = BASE_DIR / 'static/images/uploads'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = 'AKIATNXGHWS55SWVRP44'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'seefriends-bucket'
