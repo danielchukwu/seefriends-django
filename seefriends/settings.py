@@ -215,7 +215,8 @@ AUTH_PASSWORD_VALIDATORS = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'seefriends.netlify.app',
-    'http://seefriends.netlify.app',
+    'https://seefriends.netlify.app/',
+    # 'http://seefriends.netlify.app',
     # 'http://seefriends.netlify.app', # future
 ]
 
