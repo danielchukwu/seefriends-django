@@ -214,8 +214,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
-    'seefriends.herokuapp.com', # future
-    'http://seefriends.netlify.app', # future
+    'seefriends.netlify.app',
+    # 'http://seefriends.netlify.app', # future
 ]
 
 
