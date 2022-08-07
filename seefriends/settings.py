@@ -148,27 +148,27 @@ SIMPLE_JWT = {
 # }
 
 # Postgres database - On my local device
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'seefriends_2', 
-#         'USER': 'postgres', 
-#         'PASSWORD': 'Danielcarl4u_',
-#         'HOST': 'localhost', 
-#         'PORT': '5432',
-#     }
-# }
-# Postgres database - On AWS
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'seefriends', 
-        'USER': 'danielchukwu', 
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'seefriends_2', 
+        'USER': 'postgres', 
         'PASSWORD': 'Danielcarl4u_',
-        'HOST': 'seefriendsdb-1.crox0djaqnnr.us-east-1.rds.amazonaws.com', 
+        'HOST': 'localhost', 
         'PORT': '5432',
     }
 }
+# Postgres database - On AWS
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'seefriends', 
+#         'USER': 'danielchukwu', 
+#         'PASSWORD': 'Danielcarl4u_',
+#         'HOST': 'seefriendsdb-1.crox0djaqnnr.us-east-1.rds.amazonaws.com', 
+#         'PORT': '5432',
+#     }
+# }
 # Helps configure Db database on Heroku when we run migrations
 # import dj_database_url
 # db_from_env = dj_database_url.config(conn_max_age=600)
