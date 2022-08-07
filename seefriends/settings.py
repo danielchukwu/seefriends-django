@@ -251,10 +251,10 @@ MEDIA_ROOT = BASE_DIR / 'static/images/uploads'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-AWS_QUERYSTRING_AUTH = False  # we don't want aws appending a long access key to the img url
-AWS_S3_FILE_OVERWRITE = False
-AWS_ACCESS_KEY_ID = 'AKIATNXGHWS55SWVRP44'
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'seefriends-bucket'
+# AWS_QUERYSTRING_AUTH = False  # we don't want aws appending a long access key to the img url
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_ACCESS_KEY_ID = 'AKIATNXGHWS55SWVRP44'
+# AWS_SECRET_ACCESS_KEY = '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'
+# AWS_STORAGE_BUCKET_NAME = 'seefriends-bucket'
